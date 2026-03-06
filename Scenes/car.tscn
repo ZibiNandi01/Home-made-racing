@@ -12,6 +12,8 @@
 resource_name = "wheel"
 albedo_color = Color(0.29586652, 0.2958665, 0.2958665, 1)
 
+[sub_resource type="LabelSettings" id="LabelSettings_wqo35"]
+
 [node name="Car" type="VehicleBody3D" unique_id=336185123]
 mass = 800.0
 script = ExtResource("1_wqo35")
@@ -28,7 +30,9 @@ shape = SubResource("BoxShape3D_go66d")
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.8131418, -0.23464179, -1.253)
 use_as_steering = true
 wheel_friction_slip = 5.0
-suspension_stiffness = 10.0
+suspension_stiffness = 30.0
+damping_compression = 2.0
+damping_relaxation = 2.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleWheelFL" unique_id=629201625]
 transform = Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0, 0, 0)
@@ -39,7 +43,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_yi23e")
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.8131418, -0.23464179, 1.2534115)
 use_as_steering = true
 wheel_friction_slip = 5.0
-suspension_stiffness = 25.0
+suspension_stiffness = 30.0
+damping_compression = 2.0
+damping_relaxation = 2.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleWheelFR" unique_id=2097816326]
 transform = Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0, 0, 0)
@@ -51,6 +57,8 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5
 use_as_traction = true
 wheel_friction_slip = 5.0
 suspension_stiffness = 25.0
+damping_compression = 2.0
+damping_relaxation = 2.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleWheelRL" unique_id=1250600026]
 transform = Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0, 0, 0)
@@ -62,6 +70,8 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5
 use_as_traction = true
 wheel_friction_slip = 5.0
 suspension_stiffness = 25.0
+damping_compression = 2.0
+damping_relaxation = 2.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleWheelRR" unique_id=1336226293]
 transform = Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0, 0, 0)
@@ -76,3 +86,18 @@ current = true
 [node name="Camera3D2" type="Camera3D" parent="." unique_id=942245965]
 transform = Transform3D(0.9996665, 0.02315846, 0.011428499, -0.023156948, 0.99973184, -0.0002647393, -0.011431565, 1.8709012e-09, 0.99993473, 0.16793692, -0.1345172, 3.6011865)
 doppler_tracking = 2
+
+[node name="speedometer" type="Control" parent="." unique_id=1993951882]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="speedometer" unique_id=1373768647]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 64.0
+offset_bottom = 47.0
+text = "w"
+label_settings = SubResource("LabelSettings_wqo35")

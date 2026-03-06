@@ -1,23 +1,27 @@
 [gd_scene format=3 uid="uid://bfe0svk5g68jr"]
 
 [ext_resource type="PackedScene" uid="uid://bu7ukjps2arja" path="res://Scenes/car.tscn" id="1_ebmjs"]
+[ext_resource type="Script" uid="uid://dbfr8f1bvrt6n" path="res://Scripts/game.gd" id="1_qxrlw"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_qxrlw"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_ebmjs"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qxrlw"]
+specular_mode = 1
+vertex_color_use_as_albedo = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ebmjs"]
 albedo_color = Color(1, 0, 0, 1)
 
 [node name="Game" type="Node3D" unique_id=2054967099]
+script = ExtResource("1_qxrlw")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1817314595]
-transform = Transform3D(1, 0, 0, 0, -0.68902546, 0.7247373, 0, -0.7247373, -0.68902546, 0, 4.42093, -13.345305)
+transform = Transform3D(1, 0, 0, 0, -0.6890254, 0.7247372, 0, -0.7247372, -0.6890254, 0, 4.42093, -13.345305)
 
 [node name="Car" parent="." unique_id=336185123 instance=ExtResource("1_ebmjs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.967239, 0.24858713)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0945697, 0.24858713)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1484713823]
 
