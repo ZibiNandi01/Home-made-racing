@@ -12,8 +12,6 @@
 resource_name = "wheel"
 albedo_color = Color(0.29586652, 0.2958665, 0.2958665, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_wqo35"]
-
 [node name="Car" type="VehicleBody3D" unique_id=336185123]
 mass = 800.0
 script = ExtResource("1_wqo35")
@@ -86,18 +84,3 @@ current = true
 [node name="Camera3D2" type="Camera3D" parent="." unique_id=942245965]
 transform = Transform3D(0.9996665, 0.02315846, 0.011428499, -0.023156948, 0.99973184, -0.0002647393, -0.011431565, 1.8709012e-09, 0.99993473, 0.16793692, -0.1345172, 3.6011865)
 doppler_tracking = 2
-
-[node name="speedometer" type="Control" parent="." unique_id=1993951882]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Label" type="Label" parent="speedometer" unique_id=1373768647]
-layout_mode = 0
-offset_left = 24.0
-offset_top = 24.0
-offset_right = 64.0
-offset_bottom = 47.0
-text = "w"
-label_settings = SubResource("LabelSettings_wqo35")

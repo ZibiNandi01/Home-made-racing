@@ -33,4 +33,4 @@ func _physics_process(delta):
 	brake = int(Input.is_action_pressed("down")) * BRAKE_POWER
 	
 	if SPEEDOMETER_LABEL:
-		SPEEDOMETER_LABEL.text = str(linear_velocity.length()*3.6)
+		SPEEDOMETER_LABEL.text = str(int(linear_velocity.length()*3.6))
