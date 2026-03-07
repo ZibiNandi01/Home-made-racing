@@ -2,6 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://bu7ukjps2arja" path="res://Scenes/car.tscn" id="1_ebmjs"]
 [ext_resource type="Script" uid="uid://dbfr8f1bvrt6n" path="res://Scripts/game.gd" id="1_qxrlw"]
+[ext_resource type="Texture2D" uid="uid://cphojuiutib2p" path="res://Assets/20260307_085144.jpg" id="3_wrm1d"]
+[ext_resource type="Texture2D" uid="uid://c44p6f8t1d6p0" path="res://Assets/20260307_085058.jpg" id="4_3dryh"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_qxrlw"]
 
@@ -10,11 +12,23 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qxrlw"]
 specular_mode = 1
 vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("3_wrm1d")
+uv1_scale = Vector3(5, 5, 5)
+uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ebmjs"]
 albedo_color = Color(1, 0, 0, 1)
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_3dryh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wowpa"]
+albedo_color = Color(1.6153606, 1.6153606, 1.6153606, 1)
+albedo_texture = ExtResource("4_3dryh")
+uv1_scale = Vector3(5, 5, 5)
+uv1_triplanar = true
+
 [node name="Game" type="Node3D" unique_id=2054967099]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 script = ExtResource("1_qxrlw")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1817314595]
@@ -78,6 +92,11 @@ surface_material_override/0 = SubResource("StandardMaterial3D_qxrlw")
 transform = Transform3D(64.965164, 0, -3.1078176, 0, 1, 0, 26.507822, 0, 7.6166153, 131.98434, 0, 26.126472)
 mesh = SubResource("PlaneMesh_ebmjs")
 surface_material_override/0 = SubResource("StandardMaterial3D_qxrlw")
+
+[node name="MeshInstance3D11" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D" unique_id=1989293183]
+transform = Transform3D(433.52203, 0, 0, 0, 1, 0, 0, 0, 257.5614, 0, -0.1, 0)
+mesh = SubResource("PlaneMesh_3dryh")
+surface_material_override/0 = SubResource("StandardMaterial3D_wowpa")
 
 [node name="UI" type="Control" parent="." unique_id=2069332504]
 layout_mode = 3

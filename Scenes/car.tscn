@@ -14,6 +14,8 @@ albedo_color = Color(0.29586652, 0.2958665, 0.2958665, 1)
 
 [node name="Car" type="VehicleBody3D" unique_id=336185123]
 mass = 800.0
+center_of_mass_mode = 1
+center_of_mass = Vector3(0, -0.2, 0)
 script = ExtResource("1_wqo35")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=403820933]
@@ -27,9 +29,9 @@ shape = SubResource("BoxShape3D_go66d")
 [node name="VehicleWheelFL" type="VehicleWheel3D" parent="." unique_id=1352343715]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.8131418, -0.23464179, -1.253)
 use_as_steering = true
-wheel_friction_slip = 5.0
-suspension_stiffness = 30.0
-damping_compression = 2.0
+wheel_friction_slip = 3.0
+suspension_stiffness = 50.0
+damping_compression = 5.0
 damping_relaxation = 2.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleWheelFL" unique_id=629201625]
@@ -40,9 +42,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_yi23e")
 [node name="VehicleWheelFR" type="VehicleWheel3D" parent="." unique_id=1830542043]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.8131418, -0.23464179, 1.2534115)
 use_as_steering = true
-wheel_friction_slip = 5.0
-suspension_stiffness = 30.0
-damping_compression = 2.0
+wheel_friction_slip = 3.0
+suspension_stiffness = 50.0
+damping_compression = 5.0
 damping_relaxation = 2.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleWheelFR" unique_id=2097816326]
@@ -53,9 +55,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_yi23e")
 [node name="VehicleWheelRL" type="VehicleWheel3D" parent="." unique_id=1611742216]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5358391, -0.23464179, -1.253)
 use_as_traction = true
-wheel_friction_slip = 5.0
-suspension_stiffness = 25.0
-damping_compression = 2.0
+wheel_friction_slip = 3.0
+suspension_stiffness = 50.0
+damping_compression = 5.0
 damping_relaxation = 2.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleWheelRL" unique_id=1250600026]
@@ -66,9 +68,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_yi23e")
 [node name="VehicleWheelRR" type="VehicleWheel3D" parent="." unique_id=62407264]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5358391, -0.23464179, 1.2534117)
 use_as_traction = true
-wheel_friction_slip = 5.0
-suspension_stiffness = 25.0
-damping_compression = 2.0
+wheel_friction_slip = 3.0
+suspension_stiffness = 50.0
+damping_compression = 5.0
 damping_relaxation = 2.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleWheelRR" unique_id=1336226293]
