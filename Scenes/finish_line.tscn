@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://cyqbgg5q8iuxw"]
+
+[sub_resource type="GDScript" id="GDScript_g36v6"]
+script/source = "extends Area3D
+
+@export var CURRENT_TIME_LABEL: Label
+
+var lap_stert_time=0
+var lap_time
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+
+func _on_body_entered(body: Node3D) -> void:
+	if lap_stert_time!=0:
+		lap_time = float(Time.get_ticks_msec() - lap_stert_time)
+		var printed_time = lap_time/1000
+		print(\"finish: \", printed_time)
+	lap_stert_time = Time.get_ticks_msec()
+	
+	
+	# Replace with function body.
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g36v6"]
+size = Vector3(1, 0.99316406, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_g36v6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_svule"]
+
+[node name="finish_line" type="Area3D" unique_id=1737056427]
+transform = Transform3D(1, 0, 0, 0, 4.8606505, 0, 0, 0, 10.702861, 0, 1.0343399, 0)
+collision_layer = 128
+collision_mask = 128
+script = SubResource("GDScript_g36v6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=967680097]
+transform = Transform3D(0.019377748, 0, 0, 0, 2.5893054, 0, 0, 0, -4.8105364, 0, 1.3311048, 0)
+shape = SubResource("BoxShape3D_g36v6")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1350542890]
+transform = Transform3D(0.066491246, 0, 0, 0, 0.06697435, 0, 0, 0, 5.435789, 0, -0.022831365, 0)
+mesh = SubResource("BoxMesh_g36v6")
+surface_material_override/0 = SubResource("StandardMaterial3D_svule")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

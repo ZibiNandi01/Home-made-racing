@@ -4,13 +4,13 @@ extends VehicleBody3D
 @export var MAX_STEER = 0.6
 var stearing_speed = 1.25
 var returning_speed = 2.5
-@export var ENGINE_POWER = 5000
-@export var BRAKE_POWER = 100
+@export var ENGINE_POWER = 50
+@export var BRAKE_POWER = 10
 var direction = 1
 @export var SPEEDOMETER_LABEL: Label
 var speed
 var air_density = 1.225
-var form_coefficent = .2
+var form_coefficent = 1
 var surface = 2
 
 func air_resistance(spd, dens, form, surf):
@@ -40,7 +40,8 @@ func _physics_process(delta):
 	engine_force = int(Input.is_action_pressed("up")) * ENGINE_POWER * direction
 	brake = int(Input.is_action_pressed("down")) * BRAKE_POWER
 	
-	#apply_central_force(air_resistance(speed, air_density, form_coefficent, surface))
+	var air_res = linear_velocity.normalized()	 * air_resistance(speed, air_density, form_coefficent, surface) *-1
+	apply_central_force(air_res)
 	
 	if SPEEDOMETER_LABEL:
 		SPEEDOMETER_LABEL.text = str(int(linear_velocity.length()*3.6))

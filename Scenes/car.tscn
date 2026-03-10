@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bu7ukjps2arja"]
 
 [ext_resource type="Script" uid="uid://bb3sifau7w7uf" path="res://Scripts/car.gd" id="1_wqo35"]
+[ext_resource type="Script" uid="uid://bhuxyg4prr8jb" path="res://Scenes/vehicle_wheel_fl.gd" id="2_go66d"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_wqo35"]
 
@@ -16,7 +17,10 @@ albedo_color = Color(0.29586652, 0.2958665, 0.2958665, 1)
 mass = 800.0
 center_of_mass_mode = 1
 center_of_mass = Vector3(0, -0.2, 0)
+engine_force = 477.87
 script = ExtResource("1_wqo35")
+ENGINE_POWER = 5000
+BRAKE_POWER = 70
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=403820933]
 transform = Transform3D(4.2220054, 0, 0, 0, 1, 0, 0, 0, 1.9686166, 0, 0, 0)
@@ -26,24 +30,27 @@ mesh = SubResource("BoxMesh_wqo35")
 transform = Transform3D(4.232986, 0, 0, 0, 1, 0, 0, 0, 1.9878243, 0, 0, 0)
 shape = SubResource("BoxShape3D_go66d")
 
-[node name="VehicleWheelFL" type="VehicleWheel3D" parent="." unique_id=1352343715]
+[node name="VehicleWheelFL" type="VehicleWheel3D" parent="." unique_id=1352343715 groups=["FrontWheel"]]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.8131418, -0.23464179, -1.253)
+brake = 100.0
 use_as_steering = true
 wheel_friction_slip = 3.0
-suspension_stiffness = 50.0
+suspension_stiffness = 80.0
 damping_compression = 5.0
 damping_relaxation = 2.0
+script = ExtResource("2_go66d")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleWheelFL" unique_id=629201625]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="VehicleWheelFL" unique_id=629201625]
 transform = Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("CylinderMesh_1sfmx")
 surface_material_override/0 = SubResource("StandardMaterial3D_yi23e")
 
-[node name="VehicleWheelFR" type="VehicleWheel3D" parent="." unique_id=1830542043]
+[node name="VehicleWheelFR" type="VehicleWheel3D" parent="." unique_id=1830542043 groups=["FrontWheel"]]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.8131418, -0.23464179, 1.2534115)
+brake = 100.0
 use_as_steering = true
 wheel_friction_slip = 3.0
-suspension_stiffness = 50.0
+suspension_stiffness = 80.0
 damping_compression = 5.0
 damping_relaxation = 2.0
 
@@ -52,11 +59,13 @@ transform = Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0,
 mesh = SubResource("CylinderMesh_1sfmx")
 surface_material_override/0 = SubResource("StandardMaterial3D_yi23e")
 
-[node name="VehicleWheelRL" type="VehicleWheel3D" parent="." unique_id=1611742216]
+[node name="VehicleWheelRL" type="VehicleWheel3D" parent="." unique_id=1611742216 groups=["RearWheel"]]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5358391, -0.23464179, -1.253)
+engine_force = 477.87
+brake = 50.0
 use_as_traction = true
 wheel_friction_slip = 3.0
-suspension_stiffness = 50.0
+suspension_stiffness = 80.0
 damping_compression = 5.0
 damping_relaxation = 2.0
 
@@ -65,11 +74,13 @@ transform = Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0,
 mesh = SubResource("CylinderMesh_1sfmx")
 surface_material_override/0 = SubResource("StandardMaterial3D_yi23e")
 
-[node name="VehicleWheelRR" type="VehicleWheel3D" parent="." unique_id=62407264]
+[node name="VehicleWheelRR" type="VehicleWheel3D" parent="." unique_id=62407264 groups=["RearWheel"]]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5358391, -0.23464179, 1.2534117)
+engine_force = 477.87
+brake = 50.0
 use_as_traction = true
 wheel_friction_slip = 3.0
-suspension_stiffness = 50.0
+suspension_stiffness = 80.0
 damping_compression = 5.0
 damping_relaxation = 2.0
 
