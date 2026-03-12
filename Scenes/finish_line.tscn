@@ -7,6 +7,7 @@ script/source = "extends Area3D
 
 var lap_stert_time=0
 var lap_time
+var current_time
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -22,7 +23,12 @@ func _on_body_entered(body: Node3D) -> void:
 	lap_stert_time = Time.get_ticks_msec()
 	
 	
-	# Replace with function body.
+	
+func _physics_process(delta: float) -> void:
+	if lap_stert_time != 0:
+		current_time = Time.get_ticks_msec() - lap_stert_time
+	if CURRENT_TIME_LABEL:
+		CURRENT_TIME_LABEL.text = str(234)
 "
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_g36v6"]

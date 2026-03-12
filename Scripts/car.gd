@@ -1,9 +1,9 @@
 extends VehicleBody3D
 
 
-@export var MAX_STEER = 0.6
-var stearing_speed = 1.25
-var returning_speed = 2.5
+@export var MAX_STEER = 0.4
+var stearing_speed = 1
+var returning_speed = 2
 @export var ENGINE_POWER = 50
 @export var BRAKE_POWER = 10
 var direction = 1
