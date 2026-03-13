@@ -6,6 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://c44p6f8t1d6p0" path="res://Assets/20260307_085058.jpg" id="4_3dryh"]
 [ext_resource type="Texture2D" uid="uid://pnwj3hu3hr4u" path="res://Assets/20260307_085032(1).jpg" id="5_i6g32"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_i6g32"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_wowpa"]
+
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_qxrlw"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_ebmjs"]
@@ -40,12 +44,21 @@ FASTEST_TIME_LABEL = NodePath("../UI/Fastest_time")
 LAST_LAP = NodePath("../UI/Last_time")
 
 [node name="Car" parent="." unique_id=336185123 node_paths=PackedStringArray("SPEEDOMETER_LABEL") instance=ExtResource("1_ebmjs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.7487, 1.0945697, 0.24858713)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -338.95303, 2.7982726, -51.824673)
 collision_layer = 129
 collision_mask = 129
 SPEEDOMETER_LABEL = NodePath("../UI/Speedometer")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1484713823]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D" unique_id=286161145]
+transform = Transform3D(9.417036, 0, 0, 0, 14.701593, 0, 0, 0, 22.60111, 273.83676, 7.357448, 0)
+shape = SubResource("BoxShape3D_i6g32")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D2" unique_id=924740858]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 0.9936024, 0, 0, 0)
+layers = 1023
+mesh = SubResource("BoxMesh_wowpa")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=631239448]
 shape = SubResource("WorldBoundaryShape3D_qxrlw")
@@ -118,27 +131,27 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 17.631
 anchor_bottom = 13.955001
-offset_left = 965.0
-offset_top = 88.0
-offset_right = -0.015014648
-offset_bottom = -530.93005
+offset_left = 893.0
+offset_top = 101.0
+offset_right = -72.015015
+offset_bottom = -517.93005
 
 [node name="Current_time" type="Label" parent="UI" unique_id=965927838]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 17.711
 anchor_bottom = 14.111001
-offset_left = 962.0
-offset_top = 23.0
-offset_right = -38.215088
-offset_bottom = -598.106
+offset_left = 890.0
+offset_top = 36.0
+offset_right = -110.21509
+offset_bottom = -585.106
 
 [node name="Last_time" type="Label" parent="UI" unique_id=1718802579]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 17.689001
 anchor_bottom = 14.163001
-offset_left = 963.0
-offset_top = 54.0
-offset_right = -146.78503
-offset_bottom = -574.49805
+offset_left = 891.0
+offset_top = 67.0
+offset_right = -57.785034
+offset_bottom = -561.49805

@@ -11,7 +11,7 @@ var wheel_list = [WheelFL, WheelFR, WheelRL, WheelRR]
 
 @export var MAX_STEER = 0.5
 @export var ENGINE_POWER = 50
-@export var BRAKE_POWER = 7
+@export var BRAKE_POWER = 10
 
 var stearing_speed = 1.2
 var returning_speed = 1.5
@@ -21,7 +21,7 @@ var direction = 1
 var speed
 var pedal_sens = 2
 
-var brake_balance = 0.6
+var brake_balance = 0.8
 
 var air_density = 1.225
 var form_coefficent = 1
