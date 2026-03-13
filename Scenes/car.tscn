@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://bu7ukjps2arja"]
 
 [ext_resource type="Script" uid="uid://bb3sifau7w7uf" path="res://Scripts/car.gd" id="1_wqo35"]
-[ext_resource type="Script" uid="uid://bhuxyg4prr8jb" path="res://Scenes/vehicle_wheel_fl.gd" id="2_go66d"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_wqo35"]
 
@@ -12,6 +11,8 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yi23e"]
 resource_name = "wheel"
 albedo_color = Color(0.29586652, 0.2958665, 0.2958665, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_go66d"]
 
 [node name="Car" type="VehicleBody3D" unique_id=336185123]
 mass = 800.0
@@ -38,12 +39,15 @@ wheel_friction_slip = 3.0
 suspension_stiffness = 80.0
 damping_compression = 5.0
 damping_relaxation = 2.0
-script = ExtResource("2_go66d")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="VehicleWheelFL" unique_id=629201625]
 transform = Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("CylinderMesh_1sfmx")
 surface_material_override/0 = SubResource("StandardMaterial3D_yi23e")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleWheelFL/MeshInstance3D2" unique_id=50712525]
+transform = Transform3D(0.64528406, 0, 0, 0, 1, 0, 0, 0, 0.11217688, 0, -1.6589642, 0)
+mesh = SubResource("BoxMesh_go66d")
 
 [node name="VehicleWheelFR" type="VehicleWheel3D" parent="." unique_id=1830542043 groups=["FrontWheel"]]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.8131418, -0.23464179, 1.2534115)
@@ -58,6 +62,10 @@ damping_relaxation = 2.0
 transform = Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("CylinderMesh_1sfmx")
 surface_material_override/0 = SubResource("StandardMaterial3D_yi23e")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleWheelFR/MeshInstance3D" unique_id=2090534759]
+transform = Transform3D(0.64528406, 0, 0, 0, 1, 0, 0, 0, 0.11217688, -1.1462547e-15, 1.6170022, 0)
+mesh = SubResource("BoxMesh_go66d")
 
 [node name="VehicleWheelRL" type="VehicleWheel3D" parent="." unique_id=1611742216 groups=["RearWheel"]]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5358391, -0.23464179, -1.253)
@@ -74,6 +82,10 @@ transform = Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0,
 mesh = SubResource("CylinderMesh_1sfmx")
 surface_material_override/0 = SubResource("StandardMaterial3D_yi23e")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleWheelRL/MeshInstance3D" unique_id=1674924866]
+transform = Transform3D(0.64528406, 0, 0, 0, 1, 0, 0, 0, 0.11217688, 0, -1.6589642, 0)
+mesh = SubResource("BoxMesh_go66d")
+
 [node name="VehicleWheelRR" type="VehicleWheel3D" parent="." unique_id=62407264 groups=["RearWheel"]]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5358391, -0.23464179, 1.2534117)
 engine_force = 477.87
@@ -89,11 +101,15 @@ transform = Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0,
 mesh = SubResource("CylinderMesh_1sfmx")
 surface_material_override/0 = SubResource("StandardMaterial3D_yi23e")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleWheelRR/MeshInstance3D" unique_id=1976864107]
+transform = Transform3D(0.64528406, 0, 0, 0, 1, 0, 0, 0, 0.11217688, -1.1462547e-15, 1.6170022, 0)
+mesh = SubResource("BoxMesh_go66d")
+
+[node name="Camera3D2" type="Camera3D" parent="." unique_id=942245965]
+transform = Transform3D(0.9996665, 0.02315846, 0.011428499, -0.023156948, 0.99973184, -0.0002647393, -0.011431565, 1.8706567e-09, 0.99993473, 0.16793692, -0.1345172, 3.6011865)
+doppler_tracking = 2
+
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1449270340]
 transform = Transform3D(-4.371139e-08, 0.23453137, -0.97210854, 0, 0.97210854, 0.23453137, 1, 1.0251692e-08, -4.2492214e-08, -4.443123, 1.926717, 0)
 doppler_tracking = 2
 current = true
-
-[node name="Camera3D2" type="Camera3D" parent="." unique_id=942245965]
-transform = Transform3D(0.9996665, 0.02315846, 0.011428499, -0.023156948, 0.99973184, -0.0002647393, -0.011431565, 1.8709012e-09, 0.99993473, 0.16793692, -0.1345172, 3.6011865)
-doppler_tracking = 2

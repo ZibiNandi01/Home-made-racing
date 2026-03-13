@@ -1,23 +1,37 @@
 extends VehicleBody3D
 
 
+@export var SPEEDOMETER_LABEL: Label
+
+@onready var WheelFL = $VehicleWheelFL
+@onready var WheelFR = $VehicleWheelFR
+@onready var WheelRL = $VehicleWheelRL
+@onready var WheelRR = $VehicleWheelRR
+var wheel_list = [WheelFL, WheelFR, WheelRL, WheelRR]
+
 @export var MAX_STEER = 0.5
-var stearing_speed = 1.2
-var returning_speed = 1.5
 @export var ENGINE_POWER = 50
 @export var BRAKE_POWER = 7
+
+var stearing_speed = 1.2
+var returning_speed = 1.5
+var max_steering
+
 var direction = 1
-@export var SPEEDOMETER_LABEL: Label
 var speed
+var pedal_sens = 2
+
+var brake_balance = 0.6
+
 var air_density = 1.225
 var form_coefficent = 1
 var surface = 2
-var pedal_sens = 2
 
 func air_resistance(spd, dens, form, surf):
 	return (0.5 * dens *spd*spd*form*surf)
 
 func _physics_process(delta):
+	#max_steering = MAX_STEER
 	if steering>0:
 		if Input.get_axis("right", "left") > steering:
 			steering = move_toward(steering, Input.get_axis("right","left") * MAX_STEER, delta *stearing_speed)
@@ -39,8 +53,13 @@ func _physics_process(delta):
 	
 	speed = linear_velocity.length()
 	engine_force = int(Input.is_action_pressed("up")) * ENGINE_POWER * direction
-	brake = int(Input.is_action_pressed("down")) * BRAKE_POWER
-	print(str(engine_force)+ "  " + str(brake))
+	
+	
+	WheelFL.brake = int(Input.is_action_pressed("down")) * BRAKE_POWER * brake_balance
+	WheelFR.brake = int(Input.is_action_pressed("down")) * BRAKE_POWER * brake_balance
+	WheelRL.brake = int(Input.is_action_pressed("down")) * BRAKE_POWER * (1-brake_balance)
+	WheelRR.brake = int(Input.is_action_pressed("down")) * BRAKE_POWER * (1-brake_balance)
+	#print(str(engine_force)+ "  " + str(brake))
 	
 	var air_res = linear_velocity.normalized()	 * air_resistance(speed, air_density, form_coefficent, surface) *-1
 	apply_central_force(air_res)

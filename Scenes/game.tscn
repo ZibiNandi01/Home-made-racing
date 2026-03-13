@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://bfe0svk5g68jr"]
 
 [ext_resource type="PackedScene" uid="uid://bu7ukjps2arja" path="res://Scenes/car.tscn" id="1_ebmjs"]
-[ext_resource type="Script" uid="uid://dbfr8f1bvrt6n" path="res://Scripts/game.gd" id="1_qxrlw"]
 [ext_resource type="PackedScene" uid="uid://cyqbgg5q8iuxw" path="res://Scenes/finish_line.tscn" id="2_wowpa"]
 [ext_resource type="Script" uid="uid://bm5fhcpbtbjwp" path="res://Scripts/finish_line.gd" id="3_i6g32"]
 [ext_resource type="Texture2D" uid="uid://c44p6f8t1d6p0" path="res://Assets/20260307_085058.jpg" id="4_3dryh"]
@@ -29,7 +28,6 @@ uv1_triplanar = true
 
 [node name="Game" type="Node3D" unique_id=2054967099]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
-script = ExtResource("1_qxrlw")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1817314595]
 transform = Transform3D(1, 0, 0, 0, -0.6890254, 0.7247372, 0, -0.7247372, -0.6890254, 0, 4.42093, -13.345305)
