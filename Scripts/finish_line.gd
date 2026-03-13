@@ -43,6 +43,6 @@ func _process(delta: float) -> void:
 	
 	if FASTEST_TIME_LABEL:
 		if fastest_time != 500000000:
-			FASTEST_TIME_LABEL.text = "Fastest lapw: " + str(fastest_time)
+			FASTEST_TIME_LABEL.text = "Fastest lap: " + str(fastest_time)
 		else:
 			FASTEST_TIME_LABEL.text = str("Fastest lap: ")

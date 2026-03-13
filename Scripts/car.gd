@@ -1,11 +1,11 @@
 extends VehicleBody3D
 
 
-@export var MAX_STEER = 0.4
-var stearing_speed = 1
-var returning_speed = 2
+@export var MAX_STEER = 0.5
+var stearing_speed = 1.2
+var returning_speed = 1.5
 @export var ENGINE_POWER = 50
-@export var BRAKE_POWER = 10
+@export var BRAKE_POWER = 7
 var direction = 1
 @export var SPEEDOMETER_LABEL: Label
 var speed

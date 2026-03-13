@@ -4,8 +4,8 @@
 [ext_resource type="Script" uid="uid://dbfr8f1bvrt6n" path="res://Scripts/game.gd" id="1_qxrlw"]
 [ext_resource type="PackedScene" uid="uid://cyqbgg5q8iuxw" path="res://Scenes/finish_line.tscn" id="2_wowpa"]
 [ext_resource type="Script" uid="uid://bm5fhcpbtbjwp" path="res://Scripts/finish_line.gd" id="3_i6g32"]
-[ext_resource type="Texture2D" uid="uid://cphojuiutib2p" path="res://Assets/20260307_085144.jpg" id="3_wrm1d"]
 [ext_resource type="Texture2D" uid="uid://c44p6f8t1d6p0" path="res://Assets/20260307_085058.jpg" id="4_3dryh"]
+[ext_resource type="Texture2D" uid="uid://pnwj3hu3hr4u" path="res://Assets/20260307_085032(1).jpg" id="5_i6g32"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_qxrlw"]
 
@@ -14,8 +14,8 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qxrlw"]
 specular_mode = 1
 vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("3_wrm1d")
-uv1_scale = Vector3(5, 5, 5)
+albedo_texture = ExtResource("5_i6g32")
+uv1_scale = Vector3(12, 5, 5)
 uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ebmjs"]
