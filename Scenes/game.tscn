@@ -39,9 +39,9 @@ transform = Transform3D(1, 0, 0, 0, -0.6890254, 0.7247372, 0, -0.7247372, -0.689
 [node name="finish_line" parent="." unique_id=1737056427 node_paths=PackedStringArray("CURRENT_TIME_LABEL", "FASTEST_TIME_LABEL", "LAST_LAP") instance=ExtResource("2_wowpa")]
 transform = Transform3D(1, 0, 0, 0, 2.6162903, 0, 0, 0, 3.0389483, 0, 0.20043397, 0)
 script = ExtResource("3_i6g32")
-CURRENT_TIME_LABEL = NodePath("../UI/Current_time")
-FASTEST_TIME_LABEL = NodePath("../UI/Fastest_time")
-LAST_LAP = NodePath("../UI/Last_time")
+CURRENT_TIME_LABEL = NodePath("../UI/VBoxContainer/Current_time")
+FASTEST_TIME_LABEL = NodePath("../UI/VBoxContainer/Fastest_time")
+LAST_LAP = NodePath("../UI/VBoxContainer/Last_time")
 
 [node name="Car" parent="." unique_id=336185123 node_paths=PackedStringArray("SPEEDOMETER_LABEL") instance=ExtResource("1_ebmjs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -338.95303, 2.7982726, -51.824673)
@@ -115,9 +115,13 @@ surface_material_override/0 = SubResource("StandardMaterial3D_wowpa")
 
 [node name="UI" type="Control" parent="." unique_id=2069332504]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 65.0
-offset_bottom = 46.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 2.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Speedometer" type="Label" parent="UI" unique_id=6324331]
 layout_mode = 0
@@ -126,32 +130,26 @@ offset_top = 13.0
 offset_right = 73.0
 offset_bottom = 41.0
 
-[node name="Fastest_time" type="Label" parent="UI" unique_id=1774498881]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI" unique_id=49036259]
 layout_mode = 1
-anchors_preset = -1
-anchor_right = 17.631
-anchor_bottom = 13.955001
-offset_left = 893.0
-offset_top = 101.0
-offset_right = -72.015015
-offset_bottom = -517.93005
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 866.0
+offset_top = 29.0
+offset_right = -51.0
+offset_bottom = -469.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Current_time" type="Label" parent="UI" unique_id=965927838]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 17.711
-anchor_bottom = 14.111001
-offset_left = 890.0
-offset_top = 36.0
-offset_right = -110.21509
-offset_bottom = -585.106
+[node name="Current_time" type="Label" parent="UI/VBoxContainer" unique_id=965927838]
+layout_mode = 2
+text = "123"
 
-[node name="Last_time" type="Label" parent="UI" unique_id=1718802579]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 17.689001
-anchor_bottom = 14.163001
-offset_left = 891.0
-offset_top = 67.0
-offset_right = -57.785034
-offset_bottom = -561.49805
+[node name="Fastest_time" type="Label" parent="UI/VBoxContainer" unique_id=1774498881]
+layout_mode = 2
+text = "345"
+
+[node name="Last_time" type="Label" parent="UI/VBoxContainer" unique_id=1718802579]
+layout_mode = 2
+text = "234"

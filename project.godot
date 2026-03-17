@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="Car_test"
-run/main_scene="uid://bfe0svk5g68jr"
+config/name="Home made racing"
+run/main_scene="uid://bkx3owecy4x1d"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://Assets/icon.svg"
 

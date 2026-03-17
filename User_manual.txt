@@ -1,0 +1,5 @@
+W - Gáz
+S - Fék
+A és D - Kormányzás
+Q - Hátramenet (fokozat)
+E - Előremenet (fokozat)

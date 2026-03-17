@@ -29,6 +29,7 @@ var surface = 2
 
 func air_resistance(spd, dens, form, surf):
 	return (0.5 * dens *spd*spd*form*surf)
+	
 
 func _physics_process(delta):
 	#max_steering = MAX_STEER
@@ -59,6 +60,10 @@ func _physics_process(delta):
 	WheelFR.brake = int(Input.is_action_pressed("down")) * BRAKE_POWER * brake_balance
 	WheelRL.brake = int(Input.is_action_pressed("down")) * BRAKE_POWER * (1-brake_balance)
 	WheelRR.brake = int(Input.is_action_pressed("down")) * BRAKE_POWER * (1-brake_balance)
+	#print("")
+	#print(str(WheelFL.get_skidinfo()) + "\t" + str(WheelFR.get_skidinfo()))
+	#print(str(WheelRL.get_skidinfo()) + "\t" + str(WheelRR.get_skidinfo()))
+	#print()
 	#print(str(engine_force)+ "  " + str(brake))
 	
 	var air_res = linear_velocity.normalized()	 * air_resistance(speed, air_density, form_coefficent, surface) *-1
