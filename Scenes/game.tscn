@@ -44,7 +44,7 @@ FASTEST_TIME_LABEL = NodePath("../UI/VBoxContainer/Fastest_time")
 LAST_LAP = NodePath("../UI/VBoxContainer/Last_time")
 
 [node name="Car" parent="." unique_id=336185123 node_paths=PackedStringArray("SPEEDOMETER_LABEL") instance=ExtResource("1_ebmjs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -338.95303, 2.7982726, -51.824673)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46.93573, 2.7982726, -1.7530975)
 collision_layer = 129
 collision_mask = 129
 SPEEDOMETER_LABEL = NodePath("../UI/Speedometer")

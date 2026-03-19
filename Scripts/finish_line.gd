@@ -39,8 +39,6 @@ func _process(delta: float) -> void:
 	if CURRENT_TIME_LABEL:
 		if lap_stert_time != 0:
 			current_time_minute = 0
-			if last_lap < fastest_time:
-				fastest_time = float(last_lap)
 		#print("finish: ", last_lap)
 			current_time = float(Time.get_ticks_msec() - lap_stert_time) / 1000
 			while current_time >= 60:
@@ -52,24 +50,31 @@ func _process(delta: float) -> void:
 	
 	if LAST_LAP:
 		var last_lap_minute = 0
+		last_lap_print = last_lap
 		if last_lap == 0:
 			LAST_LAP.text = str("Last lap: ")
-		else:
-			last_lap_print = last_lap
+		elif last_lap >= 60:
 			while last_lap_print >= 60:
 				last_lap_minute += 1
 				last_lap_print -= 60
 				LAST_LAP.text = "Last lap: " + str(last_lap_minute) + ":" + str(last_lap_print)
+		else:
+			LAST_LAP.text = "Last lap: " + str(last_lap_minute) + ":" + str(last_lap_print)
+		
 	
 	if FASTEST_TIME_LABEL:
 		if fastest_time != 500000000:
 			fastest_lap_minute = 0
-			while fastest_time > 60:
-				fastest_lap_minute += 1
-				fastest_time -= 60
-				if fastest_time < 10:
-					FASTEST_TIME_LABEL.text = "Fastest lap: " + str(fastest_lap_minute) + ":0" + str(fastest_time)
-				else:
-					FASTEST_TIME_LABEL.text = "Fastest lap: " + str(fastest_lap_minute) + ":" + str(fastest_time)
+			fastest_lap_print = fastest_time
+			if fastest_lap_print >= 60:
+				while fastest_time > 60:
+					fastest_lap_minute += 1
+					fastest_lap_print -= 60
+					if fastest_time < 10:
+						FASTEST_TIME_LABEL.text = "Fastest lap: " + str(fastest_lap_minute) + ":0" + str(fastest_lap_print)
+					else:
+						FASTEST_TIME_LABEL.text = "Fastest lap: " + str(fastest_lap_minute) + ":" + str(fastest_lap_print)
+			else:
+				FASTEST_TIME_LABEL.text = "Fastest lap: " + str(fastest_lap_minute) + ":" + str(fastest_lap_print)
 		else:
 			FASTEST_TIME_LABEL.text = str("Fastest lap: ")
