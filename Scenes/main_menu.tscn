@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://bkx3owecy4x1d"]
 
 [ext_resource type="Script" uid="uid://fiis0p5salxl" path="res://Scripts/mainmenu.gd" id="2_1ehe0"]
-[ext_resource type="Script" uid="uid://rrlohd1qd3ko" path="res://Scripts/user_manual.gd" id="2_48xlc"]
 
 [node name="MainMenu" type="Control" unique_id=1434664511]
 layout_mode = 3
@@ -11,7 +10,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MainMenu" type="VBoxContainer" parent="." unique_id=1023010913]
+[node name="MainMenuContainer" type="VBoxContainer" parent="." unique_id=1023010913 node_paths=PackedStringArray("button_play", "button_user_manual", "label_user_manual", "button_back")]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -21,15 +20,24 @@ offset_top = 49.0
 offset_right = -375.0
 offset_bottom = -113.0
 script = ExtResource("2_1ehe0")
+button_play = NodePath("Play")
+button_user_manual = NodePath("ButtonUserManual")
+label_user_manual = NodePath("LabelUserManual")
+button_back = NodePath("Back")
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=849225935]
+[node name="Play" type="Button" parent="MainMenuContainer" unique_id=1968731677]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="ButtonUserManual" type="Button" parent="MainMenuContainer" unique_id=267216700]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="LabelUserManual" type="Label" parent="MainMenuContainer" unique_id=1230450570]
 visible = false
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 407.0
-offset_top = 49.0
-offset_right = -375.0
-offset_bottom = -113.0
-script = ExtResource("2_48xlc")
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Back" type="Button" parent="MainMenuContainer" unique_id=1285479806]
+visible = false
+layout_mode = 2
