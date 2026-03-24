@@ -2,6 +2,11 @@
 
 [ext_resource type="Script" uid="uid://ctebi166bjuhc" path="res://Scripts/garage_ui.gd" id="1_cs0as"]
 
+[sub_resource type="LabelSettings" id="LabelSettings_cs0as"]
+outline_color = Color(5.1608413e-06, 5.160842e-06, 5.1608413e-06, 1)
+
+[sub_resource type="Theme" id="Theme_gtvex"]
+
 [node name="Garage UI" type="Control" unique_id=188278208]
 layout_mode = 3
 anchors_preset = 15
@@ -10,7 +15,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=627942625 node_paths=PackedStringArray("button_exit")]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=627942625 node_paths=PackedStringArray("front_susp_stiff_label", "front_susp_stiff", "button_exit")]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -22,9 +27,29 @@ offset_bottom = -324.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_cs0as")
-button_exit = NodePath("Exit")
+front_susp_stiff_label = NodePath("Panel/SuspensionStiffnessFLabel")
+front_susp_stiff = NodePath("SuspensionStiffnessF")
+button_exit = NodePath("MainMenu")
 
-[node name="Exit" type="Button" parent="VBoxContainer" unique_id=1937374270]
+[node name="Panel" type="Panel" parent="VBoxContainer" unique_id=1708398131]
 layout_mode = 2
 
-[connection signal="pressed" from="VBoxContainer/Exit" to="VBoxContainer" method="_on_exit_pressed"]
+[node name="SuspensionStiffnessFLabel" type="Label" parent="VBoxContainer/Panel" unique_id=1722511317]
+layout_mode = 0
+offset_top = 4.0
+offset_right = 300.0
+offset_bottom = 27.0
+label_settings = SubResource("LabelSettings_cs0as")
+autowrap_mode = 3
+
+[node name="SuspensionStiffnessF" type="HSlider" parent="VBoxContainer" unique_id=95782044]
+layout_mode = 2
+theme = SubResource("Theme_gtvex")
+min_value = 50.0
+max_value = 180.0
+value = 50.0
+
+[node name="MainMenu" type="Button" parent="VBoxContainer" unique_id=1937374270]
+layout_mode = 2
+
+[connection signal="pressed" from="VBoxContainer/MainMenu" to="VBoxContainer" method="_on_exit_pressed"]

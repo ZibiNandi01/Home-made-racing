@@ -33,6 +33,12 @@ func air_resistance(spd, dens, form, surf):
 
 func _physics_process(delta):
 	#max_steering = MAX_STEER
+	
+	WheelFL.suspension_stiffness = Global.suspension_stiffnessF
+	WheelFR.suspension_stiffness = Global.suspension_stiffnessF
+	WheelRL.suspension_stiffness = Global.suspension_stiffnessR
+	WheelRR.suspension_stiffness = Global.suspension_stiffnessR
+	
 	if steering>0:
 		if Input.get_axis("right", "left") > steering:
 			steering = move_toward(steering, Input.get_axis("right","left") * MAX_STEER, delta *stearing_speed)

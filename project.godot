@@ -15,6 +15,10 @@ run/main_scene="uid://bkx3owecy4x1d"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://Assets/icon.svg"
 
+[autoload]
+
+Global="*uid://7ue0byy4ss7b"
+
 [dotnet]
 
 project/assembly_name="Car_test"
