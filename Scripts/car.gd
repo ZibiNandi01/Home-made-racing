@@ -28,7 +28,7 @@ var air_density = 1.225
 var form_coefficent = 1
 var surface = 2
 
-var steering_type = "slider"
+
 
 func air_resistance(spd, dens, form, surf):
 	return (0.5 * dens *spd*spd*form*surf)
@@ -51,7 +51,7 @@ func _physics_process(delta):
 	WheelRL.suspension_stiffness = Global.suspension_stiffnessR
 	WheelRR.suspension_stiffness = Global.suspension_stiffnessR
 	
-	if steering_type == "button":
+	if Global.steering_type == "button":
 		if steering>0:
 			if Input.get_axis("right", "left") > steering:
 				steering = move_toward(steering, Input.get_axis("right","left") * MAX_STEER, delta *stearing_speed)
@@ -65,7 +65,7 @@ func _physics_process(delta):
 		else:
 			steering = move_toward(steering, Input.get_axis("right","left") * MAX_STEER, delta *stearing_speed)
 			
-	if steering_type == "slider":
+	if Global.steering_type == "slider":
 		steering  = steering_value(steering_slider.value*-1, .1, MAX_STEER)
 	
 			

@@ -2,6 +2,7 @@ extends Node
 
 var suspension_stiffnessF = 90
 var suspension_stiffnessR = 90
+var steering_type = "bwutton"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

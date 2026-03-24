@@ -26,7 +26,7 @@ func _ready() -> void:
 func _on_body_entered(body: Node3D) -> void:
 	if lap_stert_time!=0:
 		last_lap = float(Time.get_ticks_msec() - lap_stert_time)/1000
-		print(Time.get_ticks_msec())
+		#print(Time.get_ticks_msec())
 		if last_lap < fastest_time:
 			fastest_time = float(last_lap)
 		#print("finish: ", last_lap)
