@@ -3,15 +3,26 @@
 [ext_resource type="Script" uid="uid://fiis0p5salxl" path="res://Scripts/mainmenu.gd" id="2_1ehe0"]
 [ext_resource type="Script" uid="uid://dikgnni0paw16" path="res://Scripts/settings.gd" id="2_48xlc"]
 
-[node name="MainMenu" type="Control" unique_id=1434664511]
+[node name="MainMenu" type="Control" unique_id=1434664511 node_paths=PackedStringArray("button_play", "settings_button", "button_user_manual", "button_exit", "label_user_manual", "button_back", "settings", "user_manual", "main_menu", "back")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("2_1ehe0")
+button_play = NodePath("MainMenuContainer/Play")
+settings_button = NodePath("MainMenuContainer/Settings")
+button_user_manual = NodePath("MainMenuContainer/ButtonUserManual")
+button_exit = NodePath("MainMenuContainer/Exit")
+label_user_manual = NodePath("User_manual/LabelUserManual")
+button_back = NodePath("Back")
+settings = NodePath("VBoxContainer/Settings")
+user_manual = NodePath("User_manual")
+main_menu = NodePath("MainMenuContainer")
+back = NodePath("Back")
 
-[node name="MainMenuContainer" type="VBoxContainer" parent="." unique_id=1023010913 node_paths=PackedStringArray("button_play", "settings_button", "button_user_manual", "button_exit", "label_user_manual", "button_back", "settings")]
+[node name="MainMenuContainer" type="VBoxContainer" parent="." unique_id=1023010913]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -20,14 +31,9 @@ offset_left = 407.0
 offset_top = 49.0
 offset_right = -375.0
 offset_bottom = -113.0
-script = ExtResource("2_1ehe0")
-button_play = NodePath("Play")
-settings_button = NodePath("Settings")
-button_user_manual = NodePath("ButtonUserManual")
-button_exit = NodePath("Exit")
-label_user_manual = NodePath("../User_manual/LabelUserManual")
-button_back = NodePath("../User_manual/Back")
-settings = NodePath("../Settings")
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
 
 [node name="Play" type="Button" parent="MainMenuContainer" unique_id=1968731677]
 layout_mode = 2
@@ -44,20 +50,6 @@ size_flags_vertical = 0
 layout_mode = 2
 
 [node name="User_manual" type="VBoxContainer" parent="." unique_id=1661489600]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="LabelUserManual" type="Label" parent="User_manual" unique_id=1230450570 groups=["User_manual"]]
-visible = false
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="Back" type="Button" parent="User_manual" unique_id=1285479806 groups=["User_manual"]]
-visible = false
-layout_mode = 2
-
-[node name="Settings" type="GridContainer" parent="." unique_id=830772324 node_paths=PackedStringArray("back_button", "steering_label", "steering_button", "mainmenu")]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -71,18 +63,54 @@ offset_right = 150.0
 offset_bottom = 250.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(1, 0.9600025)
+
+[node name="LabelUserManual" type="Label" parent="User_manual" unique_id=1230450570 groups=["User_manual"]]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1339902348 node_paths=PackedStringArray("steering_label", "steering_button", "mainmenu")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -175.0
+offset_top = -250.0
+offset_right = 175.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("2_48xlc")
-back_button = NodePath("Back")
-steering_label = NodePath("SteeringLabel")
-steering_button = NodePath("SteeringButton")
+steering_label = NodePath("Settings/SteeringLabel")
+steering_button = NodePath("Settings/SteeringButton")
 mainmenu = NodePath("../MainMenuContainer")
 
-[node name="SteeringLabel" type="Label" parent="Settings" unique_id=381021693]
+[node name="Settings" type="GridContainer" parent="VBoxContainer" unique_id=830772324]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+columns = 2
+
+[node name="SteeringLabel" type="Label" parent="VBoxContainer/Settings" unique_id=381021693]
 layout_mode = 2
 
-[node name="SteeringButton" type="Button" parent="Settings" unique_id=11315579]
+[node name="SteeringButton" type="Button" parent="VBoxContainer/Settings" unique_id=11315579]
 layout_mode = 2
 
-[node name="Back" type="Button" parent="Settings" unique_id=1207703543]
-layout_mode = 2
+[node name="Back" type="Button" parent="." unique_id=445813771]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_top = -48.0
+offset_right = 4.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0

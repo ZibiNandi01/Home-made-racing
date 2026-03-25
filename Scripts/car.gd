@@ -38,9 +38,9 @@ func steering_value(input, dead_zone, max):
 	if abs(input) < dead_zone:
 		return 0
 	elif input > 0:
-		return (input-dead_zone) * max 
+		return (input-dead_zone) * max * (1+dead_zone)
 	else:
-		return (input+dead_zone) * max 
+		return (input+dead_zone) * max * (1+dead_zone) 
 
 
 
@@ -51,7 +51,7 @@ func _physics_process(delta):
 	WheelRL.suspension_stiffness = Global.suspension_stiffnessR
 	WheelRR.suspension_stiffness = Global.suspension_stiffnessR
 	
-	if Global.steering_type == "button":
+	if Global.steering_type == "Button":
 		if steering>0:
 			if Input.get_axis("right", "left") > steering:
 				steering = move_toward(steering, Input.get_axis("right","left") * MAX_STEER, delta *stearing_speed)
@@ -65,7 +65,7 @@ func _physics_process(delta):
 		else:
 			steering = move_toward(steering, Input.get_axis("right","left") * MAX_STEER, delta *stearing_speed)
 			
-	if Global.steering_type == "slider":
+	if Global.steering_type == "Slider":
 		steering  = steering_value(steering_slider.value*-1, .1, MAX_STEER)
 	
 			

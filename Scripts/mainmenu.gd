@@ -1,4 +1,4 @@
-extends VBoxContainer
+extends Control
 
 @export var button_play: Button
 @export var settings_button: Button
@@ -8,6 +8,9 @@ extends VBoxContainer
 @export var button_back: Button
 
 @export var settings: GridContainer
+@export var user_manual: VBoxContainer
+@export var main_menu: VBoxContainer
+@export var back: Button
 	
 func _ready():
 
@@ -35,22 +38,25 @@ func _button_pressed_play():
 	get_tree().change_scene_to_file("res://Scenes/game.tscn")
 
 func _button_pressed_settings():
-	$".".visible = false
+	main_menu.visible = false
 	settings.visible = true
+	back.visible = true
 
 func _button_pressed_user_manual():
-	$Play.visible = false
-	$ButtonUserManual.visible = false
-	$Exit.visible = false
-	$LabelUserManual.visible = true
-	$Back.visible = true
+	main_menu.visible = false
+	user_manual.visible = true
+	back.visible = true
 	
 func _button_pressed_back():
-	$LabelUserManual.visible = false
-	$Back.visible = false
-	$Play.visible = true
-	$ButtonUserManual.visible = true
-	$Exit.visible = true
+	user_manual.visible = false
+	settings.visible = false
+	main_menu.visible = true
+	back.visible = false
 	
 func _button_pressed_exit():
 	get_tree().quit()
+	
+
+
+func _process(delta: float) -> void:
+	pass
