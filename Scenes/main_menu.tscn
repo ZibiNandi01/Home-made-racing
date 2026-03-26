@@ -102,6 +102,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="Back" type="Button" parent="." unique_id=445813771]
+visible = false
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
