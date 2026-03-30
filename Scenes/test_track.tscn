@@ -1,0 +1,114 @@
+[gd_scene format=3 uid="uid://kcbyyiswvcxd"]
+
+[ext_resource type="PackedScene" uid="uid://cyqbgg5q8iuxw" path="res://Scenes/finish_line.tscn" id="1_h6fmc"]
+[ext_resource type="Script" uid="uid://bm5fhcpbtbjwp" path="res://Scripts/finish_line.gd" id="2_vh8ye"]
+[ext_resource type="PackedScene" uid="uid://bu7ukjps2arja" path="res://Scenes/car.tscn" id="3_h1ppn"]
+[ext_resource type="Texture2D" uid="uid://pnwj3hu3hr4u" path="res://Assets/20260307_085032(1).jpg" id="4_7cyv6"]
+[ext_resource type="Texture2D" uid="uid://c44p6f8t1d6p0" path="res://Assets/20260307_085058.jpg" id="5_wbh00"]
+[ext_resource type="PackedScene" uid="uid://ut5h8thkptkc" path="res://Scenes/garage.tscn" id="6_onqy5"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_i6g32"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_wowpa"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_qxrlw"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ebmjs"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qxrlw"]
+specular_mode = 1
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.6542321, 0.6542321, 0.654232, 1)
+albedo_texture = ExtResource("4_7cyv6")
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_3dryh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wowpa"]
+albedo_color = Color(1.6153606, 1.6153606, 1.6153606, 1)
+albedo_texture = ExtResource("5_wbh00")
+uv1_scale = Vector3(5, 5, 5)
+uv1_triplanar = true
+
+[node name="TestTrack" type="Node3D" unique_id=2054967099]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+
+[node name="finish_line" parent="." unique_id=1737056427 instance=ExtResource("1_h6fmc")]
+transform = Transform3D(1, 0, 0, 0, 2.6162903, 0, 0, 0, 3.0389483, 0, 0.20043397, 0)
+script = ExtResource("2_vh8ye")
+
+[node name="Car" parent="." unique_id=336185123 instance=ExtResource("3_h1ppn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.910786, 1.6945133, -0.4970188)
+collision_layer = 129
+collision_mask = 129
+mass = 1500.0
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1484713823]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D" unique_id=286161145]
+transform = Transform3D(9.417036, 0, 0, 0, 14.701593, 0, 0, 0, 22.60111, 273.83676, 7.357448, 0)
+shape = SubResource("BoxShape3D_i6g32")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D2" unique_id=924740858]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 0.9936024, 0, 0, 0)
+layers = 1023
+mesh = SubResource("BoxMesh_wowpa")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=631239448]
+shape = SubResource("WorldBoundaryShape3D_qxrlw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D" unique_id=2040158013]
+transform = Transform3D(70.16507, 0, 0, 0, 1, 0, 0, 0, 8.22626, 0, 0, 0)
+mesh = SubResource("PlaneMesh_ebmjs")
+surface_material_override/0 = SubResource("StandardMaterial3D_qxrlw")
+
+[node name="MeshInstance3D9" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D" unique_id=1993407030]
+transform = Transform3D(136.72226, 0, -1.7174975, 0, 1, 0, 29.188437, 0, 8.0449705, -201.34143, 0, -28.297699)
+mesh = SubResource("PlaneMesh_ebmjs")
+surface_material_override/0 = SubResource("StandardMaterial3D_qxrlw")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D" unique_id=1303383881]
+transform = Transform3D(70.16507, 0, 0, 0, 1, 0, 0, 0, 8.22626, -180.85358, 0, 153.82378)
+mesh = SubResource("PlaneMesh_ebmjs")
+surface_material_override/0 = SubResource("StandardMaterial3D_qxrlw")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D" unique_id=1289921415]
+transform = Transform3D(-50.674553, 0, 5.6898103, 0, 1, 0, -48.530674, 0, -5.941162, -294.4148, 0, 107.1375)
+mesh = SubResource("PlaneMesh_ebmjs")
+surface_material_override/0 = SubResource("StandardMaterial3D_qxrlw")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D" unique_id=408397788]
+transform = Transform3D(-0.08034951, 0, 8.225623, 0, 1, 0, -65.76609, 0, -0.010049051, -339.83932, 0, 2.410553)
+mesh = SubResource("PlaneMesh_ebmjs")
+surface_material_override/0 = SubResource("StandardMaterial3D_qxrlw")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D" unique_id=1753123325]
+transform = Transform3D(139.93434, 0, 0, 0, 1, 0, 0, 0, 8.22626, 57.502167, 0, 118.71411)
+mesh = SubResource("PlaneMesh_ebmjs")
+surface_material_override/0 = SubResource("StandardMaterial3D_qxrlw")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D" unique_id=1434440491]
+transform = Transform3D(19.307024, 0, 6.0267725, 0, 0.99999994, 0, -20.781921, 0, 5.599051, -96.455185, 0, 136.33575)
+mesh = SubResource("PlaneMesh_ebmjs")
+surface_material_override/0 = SubResource("StandardMaterial3D_qxrlw")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D" unique_id=557556504]
+transform = Transform3D(-1.1293939, 0, -8.2222, 0, 1, 0, 35.937836, 0, -0.25839356, 190.50708, 0, 80.87229)
+mesh = SubResource("PlaneMesh_ebmjs")
+surface_material_override/0 = SubResource("StandardMaterial3D_qxrlw")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D" unique_id=133197545]
+transform = Transform3D(64.965164, 0, -3.1078176, 0, 1, 0, 26.507822, 0, 7.6166153, 131.98434, 0, 26.126472)
+mesh = SubResource("PlaneMesh_ebmjs")
+surface_material_override/0 = SubResource("StandardMaterial3D_qxrlw")
+
+[node name="MeshInstance3D11" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D" unique_id=1989293183]
+transform = Transform3D(433.52203, 0, 0, 0, 1, 0, 0, 0, 257.5614, 0, -0.1, 0)
+mesh = SubResource("PlaneMesh_3dryh")
+surface_material_override/0 = SubResource("StandardMaterial3D_wowpa")
+
+[node name="Garage" parent="." unique_id=364090337 instance=ExtResource("6_onqy5")]
+transform = Transform3D(-1.0770373e-07, 0, -2.0999997, 0, 4.4303017, 0, 2.463974, 0, -9.179391e-08, -26.866947, 0.16699287, 12.420441)
+
+[connection signal="body_entered" from="finish_line" to="Car" method="_on_finish_line_body_entered"]

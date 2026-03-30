@@ -1,10 +1,9 @@
 [gd_scene format=3 uid="uid://bu7ukjps2arja"]
 
 [ext_resource type="Script" uid="uid://bb3sifau7w7uf" path="res://Scripts/car.gd" id="1_wqo35"]
+[ext_resource type="PackedScene" uid="uid://bwsyvy6gwpfyg" path="res://Assets/auto0.glb" id="2_go66d"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_wqo35"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_go66d"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_1sfmx"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_1sfmx"]
 
@@ -12,26 +11,36 @@
 resource_name = "wheel"
 albedo_color = Color(0.29586652, 0.2958665, 0.2958665, 1)
 
-[node name="Car" type="VehicleBody3D" unique_id=336185123]
+[node name="Car" type="VehicleBody3D" unique_id=336185123 node_paths=PackedStringArray("SPEEDOMETER_LABEL", "GearLabel", "steering_slider", "gas_button", "brake_button", "self_node", "CURRENT_TIME_LABEL", "FASTEST_TIME_LABEL", "LAST_LAP")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mass = 800.0
 center_of_mass_mode = 1
 center_of_mass = Vector3(0, -0.2, 0)
 engine_force = 477.87
 script = ExtResource("1_wqo35")
+SPEEDOMETER_LABEL = NodePath("UI/Speedometer")
+GearLabel = NodePath("UI/Gear")
 ENGINE_POWER = 5000
 BRAKE_POWER = 70
+steering_slider = NodePath("UI/Control/Steering")
+gas_button = NodePath("UI/Control/Gas_pedal")
+brake_button = NodePath("UI/Control/Brake")
+self_node = NodePath(".")
+CURRENT_TIME_LABEL = NodePath("UI/VBoxContainer/Current_time")
+FASTEST_TIME_LABEL = NodePath("UI/VBoxContainer/Fastest_time")
+LAST_LAP = NodePath("UI/VBoxContainer/Last_time")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=403820933]
-transform = Transform3D(4.2220054, 0, 0, 0, 1, 0, 0, 0, 1.9686166, 0, 0, 0)
-mesh = SubResource("BoxMesh_wqo35")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5786963, 0, 0)
+
+[node name="auto0" parent="MeshInstance3D" unique_id=1325753642 instance=ExtResource("2_go66d")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1959653364]
-transform = Transform3D(4.232986, 0, 0, 0, 1, 0, 0, 0, 1.9878243, 0, 0, 0)
-shape = SubResource("BoxShape3D_go66d")
+transform = Transform3D(3.3225663, 0, 0, 0, 1, 0, 0, 0, 1.4955719, -0.34547856, 0, 0)
+shape = SubResource("BoxShape3D_1sfmx")
 
 [node name="VehicleWheelFL" type="VehicleWheel3D" parent="." unique_id=1352343715 groups=["FrontWheel"]]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.8131418, -0.23464179, -1.253)
+transform = Transform3D(-3.059797e-08, 0, 0.7, 0, 0.7, 0, -0.7, 0, -3.059797e-08, 0.94910586, -0.235, -0.85499996)
 brake = 100.0
 use_as_steering = true
 wheel_radius = 0.3
@@ -46,7 +55,7 @@ mesh = SubResource("CylinderMesh_1sfmx")
 surface_material_override/0 = SubResource("StandardMaterial3D_yi23e")
 
 [node name="VehicleWheelFR" type="VehicleWheel3D" parent="." unique_id=1830542043 groups=["FrontWheel"]]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.8131418, -0.23464179, 1.2534115)
+transform = Transform3D(-3.059797e-08, 0, 0.7, 0, 0.7, 0, -0.7, 0, -3.059797e-08, 0.949, -0.235, 0.855)
 brake = 100.0
 use_as_steering = true
 wheel_radius = 0.3
@@ -61,7 +70,7 @@ mesh = SubResource("CylinderMesh_1sfmx")
 surface_material_override/0 = SubResource("StandardMaterial3D_yi23e")
 
 [node name="VehicleWheelRL" type="VehicleWheel3D" parent="." unique_id=1611742216 groups=["RearWheel"]]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5358391, -0.23464179, -1.253)
+transform = Transform3D(-3.059797e-08, 0, 0.7, 0, 0.7, 0, -0.7, 0, -3.059797e-08, -1.5358391, -0.23464179, -0.8551314)
 engine_force = 477.87
 brake = 50.0
 use_as_traction = true
@@ -77,7 +86,7 @@ mesh = SubResource("CylinderMesh_1sfmx")
 surface_material_override/0 = SubResource("StandardMaterial3D_yi23e")
 
 [node name="VehicleWheelRR" type="VehicleWheel3D" parent="." unique_id=62407264 groups=["RearWheel"]]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5358391, -0.23464179, 1.2534117)
+transform = Transform3D(-3.059797e-08, 0, 0.7, 0, 0.7, 0, -0.7, 0, -3.059797e-08, -1.5358391, -0.23464179, 0.855)
 engine_force = 477.87
 brake = 50.0
 use_as_traction = true
@@ -98,7 +107,123 @@ visible = false
 doppler_tracking = 2
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1449270340]
-transform = Transform3D(-4.371139e-08, 0.23453137, -0.97210854, 0, 0.97210854, 0.23453137, 1, 1.0251692e-08, -4.2492214e-08, -4.443123, 1.926717, 0)
+transform = Transform3D(-4.371139e-08, 0.23453137, -0.97210854, 0, 0.97210854, 0.23453137, 1, 1.0251692e-08, -4.2492214e-08, -4.443, 2.5, 0)
 doppler_tracking = 2
 current = true
 size = 4.125
+far = 400.0
+
+[node name="UI" type="Control" parent="." unique_id=625398877]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 2.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Speedometer" type="Label" parent="UI" unique_id=1610748221]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 13.0
+offset_right = 73.0
+offset_bottom = 41.0
+
+[node name="Gear" type="Label" parent="UI" unique_id=1091066809]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -0.5
+offset_top = 30.0
+offset_right = 0.5
+offset_bottom = 53.0
+grow_horizontal = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI" unique_id=913804164]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.75000006
+anchor_right = 1.0
+offset_left = 0.49993896
+offset_top = 29.0
+offset_right = -51.0
+offset_bottom = 180.0
+grow_horizontal = 0
+
+[node name="Current_time" type="Label" parent="UI/VBoxContainer" unique_id=1002019586]
+layout_mode = 2
+text = "123"
+
+[node name="Fastest_time" type="Label" parent="UI/VBoxContainer" unique_id=931702072]
+layout_mode = 2
+text = "345"
+
+[node name="Last_time" type="Label" parent="UI/VBoxContainer" unique_id=221848698]
+layout_mode = 2
+text = "234"
+
+[node name="Control" type="Control" parent="UI" unique_id=996717018]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Steering" type="HSlider" parent="UI/Control" unique_id=2112242560]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 45.0
+offset_top = -78.0
+offset_right = 395.0
+offset_bottom = -41.0
+grow_vertical = 0
+min_value = -1.0
+max_value = 1.0
+step = 0.01
+
+[node name="Panel" type="Panel" parent="UI/Control/Steering" unique_id=16867179]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.0
+offset_top = -26.0
+offset_right = 4.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Gas_pedal" type="Button" parent="UI/Control" unique_id=2103042313]
+modulate = Color(0, 1, 0.007843138, 1)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -161.0
+offset_top = 448.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Brake" type="Button" parent="UI/Control" unique_id=928482346]
+modulate = Color(1, 0, 0, 0.62352943)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -454.0
+offset_top = 448.0
+offset_right = -293.0
+grow_horizontal = 0
+grow_vertical = 2
