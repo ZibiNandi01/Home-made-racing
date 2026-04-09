@@ -25,7 +25,7 @@ colors = PackedColorArray(0, 0.9490196, 0, 1)
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_1sfmx"]
 gradient = SubResource("Gradient_go66d")
 
-[node name="Car" type="VehicleBody3D" unique_id=336185123 node_paths=PackedStringArray("SPEEDOMETER_LABEL", "GearLabel", "control", "steering_slider", "gas_button", "brake_button", "self_node", "CURRENT_TIME_LABEL", "FASTEST_TIME_LABEL", "LAST_LAP")]
+[node name="Car" type="VehicleBody3D" unique_id=336185123 node_paths=PackedStringArray("SPEEDOMETER_LABEL", "GearLabel", "control", "steering_slider", "gas_button", "brake_button", "self_node", "rev_disp", "CURRENT_TIME_LABEL", "FASTEST_TIME_LABEL", "LAST_LAP")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mass = 800.0
 center_of_mass_mode = 1
@@ -41,6 +41,7 @@ steering_slider = NodePath("UI/Control/Steering")
 gas_button = NodePath("UI/Control/HBoxContainer/GasButton")
 brake_button = NodePath("UI/Control/HBoxContainer/BrakeButton")
 self_node = NodePath(".")
+rev_disp = NodePath("UI/RevDisp")
 CURRENT_TIME_LABEL = NodePath("UI/VBoxContainer/Current_time")
 FASTEST_TIME_LABEL = NodePath("UI/VBoxContainer/Fastest_time")
 LAST_LAP = NodePath("UI/VBoxContainer/Last_time")
@@ -90,7 +91,7 @@ engine_force = 477.87
 brake = 50.0
 use_as_traction = true
 wheel_radius = 0.3
-wheel_friction_slip = 1.0
+wheel_friction_slip = 1.1
 suspension_stiffness = 80.0
 damping_compression = 5.0
 damping_relaxation = 2.0
@@ -106,7 +107,7 @@ engine_force = 477.87
 brake = 50.0
 use_as_traction = true
 wheel_radius = 0.3
-wheel_friction_slip = 1.0
+wheel_friction_slip = 1.1
 suspension_stiffness = 80.0
 damping_compression = 5.0
 damping_relaxation = 2.0
@@ -122,7 +123,7 @@ visible = false
 doppler_tracking = 2
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1449270340]
-transform = Transform3D(-4.371139e-08, 0.23453137, -0.97210854, 0, 0.97210854, 0.23453137, 1, 1.0251692e-08, -4.2492214e-08, -4.443, 2.5, 0)
+transform = Transform3D(-4.371139e-08, 0.23453137, -0.97210854, 0, 0.97210854, 0.23453137, 1, 1.0251692e-08, -4.2492214e-08, -4.443, 2, 0)
 doppler_tracking = 2
 current = true
 size = 4.125
@@ -240,3 +241,61 @@ texture_normal = SubResource("GradientTexture2D_u41r7")
 position = Vector2(295, 37.000004)
 scale = Vector2(3.2343748, 3.1093743)
 texture_normal = SubResource("GradientTexture2D_1sfmx")
+
+[node name="RevDisp" type="HBoxContainer" parent="UI" unique_id=1423989379]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -61.0
+offset_top = 10.0
+offset_right = 61.0
+offset_bottom = 20.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="Low1" type="ColorRect" parent="UI/RevDisp" unique_id=1138533357]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(0, 1, 0, 1)
+
+[node name="Low2" type="ColorRect" parent="UI/RevDisp" unique_id=1968180209]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(0, 1, 0, 1)
+
+[node name="Low3" type="ColorRect" parent="UI/RevDisp" unique_id=1951018038]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(0, 1, 0, 1)
+
+[node name="Med1" type="ColorRect" parent="UI/RevDisp" unique_id=394339906]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(1, 1, 0, 1)
+
+[node name="Med2" type="ColorRect" parent="UI/RevDisp" unique_id=994319509]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(1, 1, 0, 1)
+
+[node name="Med3" type="ColorRect" parent="UI/RevDisp" unique_id=742244726]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(1, 1, 0, 1)
+
+[node name="High1" type="ColorRect" parent="UI/RevDisp" unique_id=1052240017]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(1, 0, 0, 1)
+
+[node name="High2" type="ColorRect" parent="UI/RevDisp" unique_id=643729762]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(1, 0, 0, 1)
+
+[node name="High3" type="ColorRect" parent="UI/RevDisp" unique_id=1133118585]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(1, 0, 0, 1)

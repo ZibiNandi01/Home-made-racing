@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://bfe0svk5g68jr"]
 
 [ext_resource type="PackedScene" uid="uid://kcbyyiswvcxd" path="res://Scenes/test_track.tscn" id="1_qxrlw"]
-[ext_resource type="PackedScene" uid="uid://ut5h8thkptkc" path="res://Scenes/garage.tscn" id="6_i6g32"]
 
 [node name="Game" type="Node3D" unique_id=2054967099]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
@@ -9,7 +8,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1817314595]
 transform = Transform3D(1, 0, 0, 0, -0.6890254, 0.7247372, 0, -0.7247372, -0.6890254, 0, 4.42093, -13.345305)
 
-[node name="Game" parent="." unique_id=1209024042 instance=ExtResource("1_qxrlw")]
-
-[node name="Garage" parent="." unique_id=364090337 instance=ExtResource("6_i6g32")]
-transform = Transform3D(-1.0770373e-07, 0, -2.0999997, 0, 4.4303017, 0, 2.463974, 0, -9.179391e-08, -26.866947, 0.16699287, 12.420441)
+[node name="Track" parent="." unique_id=1209024042 instance=ExtResource("1_qxrlw")]

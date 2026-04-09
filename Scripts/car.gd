@@ -8,7 +8,7 @@ extends VehicleBody3D
 @onready var WheelFR = $VehicleWheelFR
 @onready var WheelRL = $VehicleWheelRL
 @onready var WheelRR = $VehicleWheelRR
-var wheel_list = [WheelFL, WheelFR, WheelRL, WheelRR]
+
 
 @export var MAX_STEER = 0.5
 @export var ENGINE_POWER = 50000
@@ -20,6 +20,8 @@ var wheel_list = [WheelFL, WheelFR, WheelRL, WheelRR]
 @export var brake_button: TouchScreenButton
 
 @export var self_node: VehicleBody3D
+
+@export var rev_disp: HBoxContainer
 
 var stearing_speed = 1.2
 var returning_speed = 1.5
@@ -57,6 +59,9 @@ var current_time_minute
 var fastest_lap_minute
 var fastest_lap_print
 
+var skid_marks = []
+var last_skid_pos = [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
+
 var fastest_time = 500000000
 
 
@@ -78,15 +83,27 @@ func steering_value(input, dead_zone, max_val):
 
 func torque_calc(x, a, b, c):
 	return a*x*x + b*x + c
+	
+
+func rev_disp_set(rpm, rev_disp):
+	for i in range(len(rev_disp.get_children())):
+		rev_disp.get_child(i).color = Color(0,0,0)
+	for i in range((rpm-6000)/333):
+		if i < 3:
+			rev_disp.get_child(i).color = Color(0,1,0)
+		elif i < 6:
+			rev_disp.get_child(i).color = Color(1,1,0)
+		elif i < 9:
+			rev_disp.get_child(i).color = Color(1,0,0)
 
 
 func _physics_process(delta):
+	var wheel_list = [WheelFL, WheelFR, WheelRL, WheelRR]
 	
 	WheelFL.suspension_stiffness = Global.suspension_stiffnessF
 	WheelFR.suspension_stiffness = Global.suspension_stiffnessF
 	WheelRL.suspension_stiffness = Global.suspension_stiffnessR
 	WheelRR.suspension_stiffness = Global.suspension_stiffnessR
-	
 	GearLabel.text = str(actual_gear)
 	
 	speed = linear_velocity.length()
@@ -94,9 +111,11 @@ func _physics_process(delta):
 	if rpm < 1000:
 		rpm = 1000
 	
-		
+	rev_disp_set(rpm, rev_disp)
+	
 	if Global.steering_type == "Button":
 		control.visible = false
+		Global.gear_box_type = "m"
 		if steering>0:
 			if Input.get_axis("right", "left") > steering:
 				steering = move_toward(steering, Input.get_axis("right","left") * MAX_STEER, delta *stearing_speed)
@@ -124,6 +143,7 @@ func _physics_process(delta):
 			
 	if Global.steering_type == "Slider":
 		control.visible = true
+		Global.gear_box_type = "a"
 		steering  = steering_value(steering_slider.value*-1, .1, MAX_STEER)
 		
 		if rpm < 9000:
@@ -132,7 +152,7 @@ func _physics_process(delta):
 		else:
 			engine_force = 0
 		
-		if rpm > 9000 and actual_gear < 6:
+		if rpm > 9000 and actual_gear < 6 and  Global.gear_box_type == "a":
 			actual_gear += 1
 		if rpm < 6500 and actual_gear > 1:
 			actual_gear -= 1
@@ -143,6 +163,15 @@ func _physics_process(delta):
 		WheelRR.brake = int(brake_button.is_pressed()) * BRAKE_POWER * (1-brake_balance)
 		
 		
+	for i in range(len(wheel_list)):
+		if wheel_list[i].get_skidinfo() < 0.8 and wheel_list[i].global_position.distance_to(last_skid_pos[i]) > 0.2:
+			var decal = preload("res://Scenes/skid_mark.tscn").instantiate()
+			decal.position = wheel_list[i].global_position
+			decal.position.y -= .3
+			get_tree().root.add_child(decal)
+			last_skid_pos[i] = wheel_list[i].global_position
+			skid_marks.append(decal)
+			#print(len(skid_marks))
 	
 			
 	if Input.is_action_pressed("gear_up") and dt > 15 and actual_gear < 6:
@@ -164,6 +193,8 @@ func _physics_process(delta):
 	down_force = -global_transform.basis.y #Vector3(0,down_force_calc(speed, air_density, Cl, surface), 0)
 	apply_central_force(down_force + air_res)
 	dt += 1
+	
+	
 	
 	if SPEEDOMETER_LABEL:
 		SPEEDOMETER_LABEL.text = str(int(linear_velocity.length()*3.6))

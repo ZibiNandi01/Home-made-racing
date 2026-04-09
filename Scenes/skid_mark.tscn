@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://cnrkk3pham0vg"]
+
+[ext_resource type="Script" uid="uid://b2uu5vwdrvjh" path="res://Scripts/skid_mark.gd" id="1_3poby"]
+
+[sub_resource type="Gradient" id="Gradient_dvs60"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_3poby"]
+gradient = SubResource("Gradient_dvs60")
+
+[node name="SkidMark" type="Decal" unique_id=1278410432]
+size = Vector3(0.2, 0.2, 0.2)
+texture_albedo = SubResource("GradientTexture2D_3poby")
+script = ExtResource("1_3poby")
