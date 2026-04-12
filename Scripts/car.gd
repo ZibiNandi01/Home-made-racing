@@ -65,6 +65,8 @@ var last_skid_pos = [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
 
 var fastest_time = 500000000
 
+var reset_position = Vector3()
+var reset = false
 
 func air_resistance(spd, dens, form, surf):
 	return (0.5 * dens *spd*spd*form*surf)
@@ -116,7 +118,7 @@ func _physics_process(delta):
 	
 	if Global.steering_type == "Button":
 		control.visible = false
-		Global.gear_box_type = "m"
+		#Global.gear_box_type = "m"
 		if steering>0:
 			if Input.get_axis("right", "left") > steering:
 				steering = move_toward(steering, Input.get_axis("right","left") * MAX_STEER, delta *stearing_speed)
@@ -146,7 +148,7 @@ func _physics_process(delta):
 
 	if Global.steering_type == "Slider":
 		control.visible = true
-		Global.gear_box_type = "a"
+		Global.gear_box_type = "automatic"
 		steering  = steering_value(steering_slider.value*-1, .1, MAX_STEER)
 		
 		if rpm < 9000 and dt > 15:
@@ -174,20 +176,20 @@ func _physics_process(delta):
 			#print(len(skid_marks))
 	
 			
-	if Input.is_action_pressed("gear_up") and dt > 15 and actual_gear < 6:
+	if Input.is_action_pressed("gear_up") and dt > 15 and actual_gear < 6 and Global.gear_box_type == "manual":
 		actual_gear += 1
 		dt =0
 		
-	if Input.is_action_pressed("gear_down") and dt > 15 and actual_gear>-1:
+	if Input.is_action_pressed("gear_down") and dt > 15 and actual_gear>-1 and Global.gear_box_type == "manual":
 		actual_gear -= 1
 		dt = 0
 	
 	
-	if rpm > 8000 and actual_gear < 6 and  Global.gear_box_type == "a" and dt > 15:
+	if rpm > 8800 and actual_gear < 6 and  Global.gear_box_type == "automatic" and dt > 15:
 		actual_gear += 1
 		dt = 0
 		gear_up = true
-	elif rpm < 6500 and actual_gear > 1 and  Global.gear_box_type == "a" and dt > 15:
+	elif rpm < 6500 and actual_gear > 1 and  Global.gear_box_type == "automatic" and dt > 15:
 		if gear_up and dt > 60:
 			actual_gear -= 1
 			dt = 0
@@ -256,7 +258,12 @@ func _physics_process(delta):
 		else:
 			FASTEST_TIME_LABEL.text = str("Fastest lap: ")
 
-
+	if reset:
+		self_node.position = reset_position
+		reset = false
+		linear_velocity = Vector3(0,0,0)
+		lap_stert_time = 0
+	
 func _on_finish_line_body_entered(self_node) -> void:
 	if lap_stert_time!=0:
 		last_lap = float(Time.get_ticks_msec() - lap_stert_time)/1000

@@ -1,14 +1,12 @@
-extends Node
+extends Node3D
 
-var suspension_stiffnessF = 90
-var suspension_stiffnessR = 90
-var steering_type = "Button"
-var gear_box_type = "manual"  # "a" = automatic, "m" = manual
+@onready var car = $Car
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
-
+	car.reset_position.x = -329.49
+	car.reset_position.y = 1.695 # Replace with function body.
+	car.reset_position.z = -54.432
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

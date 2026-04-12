@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://kcbyyiswvcxd"]
 
 [ext_resource type="PackedScene" uid="uid://cyqbgg5q8iuxw" path="res://Scenes/finish_line.tscn" id="1_h6fmc"]
+[ext_resource type="Script" uid="uid://blhae68oewk5a" path="res://Scripts/test_track.gd" id="1_l1x86"]
 [ext_resource type="Script" uid="uid://bm5fhcpbtbjwp" path="res://Scripts/finish_line.gd" id="2_vh8ye"]
 [ext_resource type="PackedScene" uid="uid://bu7ukjps2arja" path="res://Scenes/car.tscn" id="3_h1ppn"]
 [ext_resource type="Texture2D" uid="uid://pnwj3hu3hr4u" path="res://Assets/20260307_085032(1).jpg" id="4_7cyv6"]
@@ -40,13 +41,14 @@ viewport_path = NodePath("SubViewport")
 
 [node name="TestTrack" type="Node3D" unique_id=2054967099]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+script = ExtResource("1_l1x86")
 
 [node name="finish_line" parent="." unique_id=1737056427 instance=ExtResource("1_h6fmc")]
 transform = Transform3D(1, 0, 0, 0, 2.6162903, 0, 0, 0, 3.0389483, 0, 0.20043397, 0)
 script = ExtResource("2_vh8ye")
 
 [node name="Car" parent="." unique_id=336185123 instance=ExtResource("3_h1ppn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.910786, 1.6945133, -0.4970188)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -329.4904, 1.6945133, -54.4321)
 collision_layer = 129
 collision_mask = 129
 mass = 1500.0
@@ -131,6 +133,7 @@ size = Vector2i(1024, 512)
 
 [node name="Camera3D" type="Camera3D" parent="SubViewport" unique_id=609337151]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -81.57776, 283.64264, -0.10449992)
+visible = false
 
 [node name="Window" type="Window" parent="." unique_id=2117370435]
 oversampling_override = 1.0
@@ -139,6 +142,7 @@ size = Vector2i(1024, 600)
 visible = false
 
 [node name="Sprite2D" type="Sprite2D" parent="Window" unique_id=1080127075]
+visible = false
 position = Vector2(527, 200)
 texture = SubResource("ViewportTexture_ekmfy")
 
