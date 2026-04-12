@@ -7,6 +7,8 @@ func _ready() -> void:
 	car.reset_position.x = -329.49
 	car.reset_position.y = 1.695 # Replace with function body.
 	car.reset_position.z = -54.432
+	if Global.is_multiplayer:
+		get_tree().root.remove_child($Car)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

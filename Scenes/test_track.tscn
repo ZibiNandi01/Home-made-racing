@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://cyqbgg5q8iuxw" path="res://Scenes/finish_line.tscn" id="1_h6fmc"]
 [ext_resource type="Script" uid="uid://blhae68oewk5a" path="res://Scripts/test_track.gd" id="1_l1x86"]
 [ext_resource type="Script" uid="uid://bm5fhcpbtbjwp" path="res://Scripts/finish_line.gd" id="2_vh8ye"]
-[ext_resource type="PackedScene" uid="uid://bu7ukjps2arja" path="res://Scenes/car.tscn" id="3_h1ppn"]
+[ext_resource type="PackedScene" uid="uid://bu7ukjps2arja" path="res://Scenes/car_singleplayer.tscn" id="3_h1ppn"]
 [ext_resource type="Texture2D" uid="uid://pnwj3hu3hr4u" path="res://Assets/20260307_085032(1).jpg" id="4_7cyv6"]
 [ext_resource type="Texture2D" uid="uid://c44p6f8t1d6p0" path="res://Assets/20260307_085058.jpg" id="5_wbh00"]
 [ext_resource type="PackedScene" uid="uid://ut5h8thkptkc" path="res://Scenes/garage.tscn" id="6_onqy5"]
@@ -47,8 +47,8 @@ script = ExtResource("1_l1x86")
 transform = Transform3D(1, 0, 0, 0, 2.6162903, 0, 0, 0, 3.0389483, 0, 0.20043397, 0)
 script = ExtResource("2_vh8ye")
 
-[node name="Car" parent="." unique_id=336185123 instance=ExtResource("3_h1ppn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -329.4904, 1.6945133, -54.4321)
+[node name="Car" parent="." unique_id=2003958575 instance=ExtResource("3_h1ppn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.239166, 1.6945133, -1.119709)
 collision_layer = 129
 collision_mask = 129
 mass = 1500.0

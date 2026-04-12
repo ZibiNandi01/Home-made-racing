@@ -1,13 +1,15 @@
 [gd_scene format=3 uid="uid://bfe0svk5g68jr"]
 
-[ext_resource type="PackedScene" uid="uid://kcbyyiswvcxd" path="res://Scenes/test_track.tscn" id="1_qxrlw"]
-[ext_resource type="Script" uid="uid://upkaj26b7xrb" path="res://Scripts/game.gd" id="1_wrm1d"]
+[ext_resource type="Script" uid="uid://upkaj26b7xrb" path="res://Scripts/game.gd" id="1_lu4iv"]
+[ext_resource type="PackedScene" uid="uid://kcbyyiswvcxd" path="res://Scenes/test_track.tscn" id="2_co28u"]
+[ext_resource type="Script" uid="uid://c7deeedu08tyv" path="res://Scripts/multiplayer_spawner.gd" id="3_jdbfo"]
+[ext_resource type="PackedScene" uid="uid://dhpee6wwaxepp" path="res://Scenes/car_multiplayer.tscn" id="4_gidut"]
 
-[node name="Game" type="Node3D" unique_id=2054967099]
+[node name="TestTrack_logik" type="Node3D" unique_id=2054967099]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
-script = ExtResource("1_wrm1d")
+script = ExtResource("1_lu4iv")
 
-[node name="Track" parent="." unique_id=1209024042 instance=ExtResource("1_qxrlw")]
+[node name="Track" parent="." unique_id=1209024042 instance=ExtResource("2_co28u")]
 
 [node name="PauseMenu" type="Control" parent="." unique_id=562240730]
 process_mode = 2
@@ -58,6 +60,12 @@ text = "Reset"
 [node name="Quit" type="Button" parent="PauseMenu/PanelContainer/MarginContainer/VBoxContainer" unique_id=1488411315]
 layout_mode = 2
 text = "Quit"
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1059246332]
+_spawnable_scenes = PackedStringArray("uid://dhpee6wwaxepp")
+spawn_path = NodePath("..")
+script = ExtResource("3_jdbfo")
+network_player = ExtResource("4_gidut")
 
 [connection signal="pressed" from="PauseMenu/PanelContainer/MarginContainer/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="PauseMenu/PanelContainer/MarginContainer/VBoxContainer/Resume" to="PauseMenu/PanelContainer/MarginContainer/VBoxContainer/Resume" method="_on_pressed"]

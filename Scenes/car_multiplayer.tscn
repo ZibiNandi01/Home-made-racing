@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://bu7ukjps2arja"]
+[gd_scene format=3 uid="uid://dhpee6wwaxepp"]
 
-[ext_resource type="Script" uid="uid://bb3sifau7w7uf" path="res://Scripts/car.gd" id="1_wqo35"]
-[ext_resource type="PackedScene" uid="uid://bwsyvy6gwpfyg" path="res://Assets/auto0.glb" id="2_go66d"]
+[ext_resource type="Script" uid="uid://chyv03oib8uqk" path="res://Scripts/car_multiplayer.gd" id="1_r2wud"]
+[ext_resource type="PackedScene" uid="uid://bwsyvy6gwpfyg" path="res://Assets/auto0.glb" id="2_dih0e"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1sfmx"]
 
@@ -27,15 +27,13 @@ gradient = SubResource("Gradient_go66d")
 
 [node name="Car" type="VehicleBody3D" unique_id=336185123 node_paths=PackedStringArray("SPEEDOMETER_LABEL", "GearLabel", "control", "steering_slider", "gas_button", "brake_button", "self_node", "rev_disp", "CURRENT_TIME_LABEL", "FASTEST_TIME_LABEL", "LAST_LAP")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-mass = 800.0
+mass = 1300.0
 center_of_mass_mode = 1
 center_of_mass = Vector3(0, -0.2, 0)
 engine_force = 477.87
-script = ExtResource("1_wqo35")
+script = ExtResource("1_r2wud")
 SPEEDOMETER_LABEL = NodePath("UI/Speedometer")
 GearLabel = NodePath("UI/Gear")
-ENGINE_POWER = 5000
-BRAKE_POWER = 70
 control = NodePath("UI/Control")
 steering_slider = NodePath("UI/Control/Steering")
 gas_button = NodePath("UI/Control/HBoxContainer/GasButton")
@@ -49,7 +47,7 @@ LAST_LAP = NodePath("UI/VBoxContainer/Last_time")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=403820933]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5786963, 0, 0)
 
-[node name="auto0" parent="MeshInstance3D" unique_id=1325753642 instance=ExtResource("2_go66d")]
+[node name="auto0" parent="MeshInstance3D" unique_id=1325753642 instance=ExtResource("2_dih0e")]
 
 [node name="SpotLight3D" type="SpotLight3D" parent="MeshInstance3D" unique_id=1699925068]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3, 0, 0.444)

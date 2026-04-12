@@ -1,0 +1,321 @@
+[gd_scene format=3 uid="uid://bu7ukjps2arja"]
+
+[ext_resource type="Script" uid="uid://bb3sifau7w7uf" path="res://Scripts/car_singleplayer.gd" id="1_hx4cu"]
+[ext_resource type="PackedScene" uid="uid://bwsyvy6gwpfyg" path="res://Assets/auto0.glb" id="2_olmqf"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1sfmx"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_1sfmx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yi23e"]
+resource_name = "wheel"
+albedo_color = Color(0.29586652, 0.2958665, 0.2958665, 1)
+
+[sub_resource type="Gradient" id="Gradient_yi23e"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(1, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_u41r7"]
+gradient = SubResource("Gradient_yi23e")
+
+[sub_resource type="Gradient" id="Gradient_go66d"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0.9490196, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_1sfmx"]
+gradient = SubResource("Gradient_go66d")
+
+[node name="Car" type="VehicleBody3D" unique_id=336185123 node_paths=PackedStringArray("SPEEDOMETER_LABEL", "GearLabel", "control", "steering_slider", "gas_button", "brake_button", "self_node", "rev_disp", "CURRENT_TIME_LABEL", "FASTEST_TIME_LABEL", "LAST_LAP")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mass = 1300.0
+center_of_mass_mode = 1
+center_of_mass = Vector3(0, -0.2, 0)
+engine_force = 477.87
+script = ExtResource("1_hx4cu")
+SPEEDOMETER_LABEL = NodePath("UI/Speedometer")
+GearLabel = NodePath("UI/Gear")
+ENGINE_POWER = 5000
+BRAKE_POWER = 70
+control = NodePath("UI/Control")
+steering_slider = NodePath("UI/Control/Steering")
+gas_button = NodePath("UI/Control/HBoxContainer/GasButton")
+brake_button = NodePath("UI/Control/HBoxContainer/BrakeButton")
+self_node = NodePath(".")
+rev_disp = NodePath("UI/RevDisp")
+CURRENT_TIME_LABEL = NodePath("UI/VBoxContainer/Current_time")
+FASTEST_TIME_LABEL = NodePath("UI/VBoxContainer/Fastest_time")
+LAST_LAP = NodePath("UI/VBoxContainer/Last_time")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=403820933]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5786963, 0, 0)
+
+[node name="auto0" parent="MeshInstance3D" unique_id=1325753642 instance=ExtResource("2_olmqf")]
+
+[node name="SpotLight3D" type="SpotLight3D" parent="MeshInstance3D" unique_id=1699925068]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3, 0, 0.444)
+light_energy = 16.0
+light_indirect_energy = 16.0
+light_volumetric_fog_energy = 16.0
+spot_range = 99.733
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="MeshInstance3D" unique_id=850514611]
+transform = Transform3D(-4.3711385e-08, 0, -1, 0, 1, 0, 1, 0, -4.3711385e-08, 3, 0, -0.4441924)
+light_energy = 16.0
+light_indirect_energy = 16.0
+light_volumetric_fog_energy = 16.0
+spot_range = 99.733
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1959653364]
+transform = Transform3D(3.3225663, 0, 0, 0, 1.3735961, 0, 0, 0, 1.4955719, -0.34547856, 0.3078034, 0)
+shape = SubResource("BoxShape3D_1sfmx")
+
+[node name="VehicleWheelFL" type="VehicleWheel3D" parent="." unique_id=1352343715 groups=["FrontWheel"]]
+transform = Transform3D(-3.059797e-08, 0, 0.7, 0, 0.7, 0, -0.7, 0, -3.059797e-08, 0.94910586, -0.235, -0.85499996)
+brake = 100.0
+use_as_steering = true
+wheel_radius = 0.3
+wheel_friction_slip = 1.0
+suspension_stiffness = 90.0
+damping_compression = 5.0
+damping_relaxation = 2.0
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="VehicleWheelFL" unique_id=629201625]
+transform = Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_1sfmx")
+surface_material_override/0 = SubResource("StandardMaterial3D_yi23e")
+
+[node name="VehicleWheelFR" type="VehicleWheel3D" parent="." unique_id=1830542043 groups=["FrontWheel"]]
+transform = Transform3D(-3.059797e-08, 0, 0.7, 0, 0.7, 0, -0.7, 0, -3.059797e-08, 0.949, -0.235, 0.855)
+brake = 100.0
+use_as_steering = true
+wheel_radius = 0.3
+wheel_friction_slip = 1.0
+suspension_stiffness = 90.0
+damping_compression = 5.0
+damping_relaxation = 2.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleWheelFR" unique_id=2097816326]
+transform = Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_1sfmx")
+surface_material_override/0 = SubResource("StandardMaterial3D_yi23e")
+
+[node name="VehicleWheelRL" type="VehicleWheel3D" parent="." unique_id=1611742216 groups=["RearWheel"]]
+transform = Transform3D(-3.059797e-08, 0, 0.7, 0, 0.7, 0, -0.7, 0, -3.059797e-08, -1.5358391, -0.23464179, -0.8551314)
+engine_force = 477.87
+brake = 50.0
+use_as_traction = true
+wheel_radius = 0.3
+wheel_friction_slip = 1.1
+suspension_stiffness = 80.0
+damping_compression = 5.0
+damping_relaxation = 2.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleWheelRL" unique_id=1250600026]
+transform = Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_1sfmx")
+surface_material_override/0 = SubResource("StandardMaterial3D_yi23e")
+
+[node name="VehicleWheelRR" type="VehicleWheel3D" parent="." unique_id=62407264 groups=["RearWheel"]]
+transform = Transform3D(-3.059797e-08, 0, 0.7, 0, 0.7, 0, -0.7, 0, -3.059797e-08, -1.5358391, -0.23464179, 0.855)
+engine_force = 477.87
+brake = 50.0
+use_as_traction = true
+wheel_radius = 0.3
+wheel_friction_slip = 1.1
+suspension_stiffness = 80.0
+damping_compression = 5.0
+damping_relaxation = 2.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleWheelRR" unique_id=1336226293]
+transform = Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_1sfmx")
+surface_material_override/0 = SubResource("StandardMaterial3D_yi23e")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1449270340]
+transform = Transform3D(-4.371139e-08, 0.23453137, -0.97210854, 0, 0.97210854, 0.23453137, 1, 1.0251692e-08, -4.2492214e-08, -4.443, 2, 0)
+doppler_tracking = 2
+current = true
+size = 4.125
+far = 400.0
+
+[node name="UI" type="Control" parent="." unique_id=625398877]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 2.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Speedometer" type="Label" parent="UI" unique_id=1610748221]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 13.0
+offset_right = 73.0
+offset_bottom = 41.0
+
+[node name="Gear" type="Label" parent="UI" unique_id=1091066809]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -0.5
+offset_top = 30.0
+offset_right = 0.5
+offset_bottom = 53.0
+grow_horizontal = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI" unique_id=913804164]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.75000006
+anchor_right = 1.0
+offset_left = 0.49993896
+offset_top = 29.0
+offset_right = -51.0
+offset_bottom = 180.0
+grow_horizontal = 0
+
+[node name="Current_time" type="Label" parent="UI/VBoxContainer" unique_id=1002019586]
+layout_mode = 2
+text = "123"
+
+[node name="Fastest_time" type="Label" parent="UI/VBoxContainer" unique_id=931702072]
+layout_mode = 2
+text = "345"
+
+[node name="Last_time" type="Label" parent="UI/VBoxContainer" unique_id=221848698]
+layout_mode = 2
+text = "234"
+
+[node name="Control" type="Control" parent="UI" unique_id=996717018]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Steering" type="HSlider" parent="UI/Control" unique_id=2112242560]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 11.0
+offset_top = 584.0
+offset_right = -710.0
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 0
+min_value = -1.0
+max_value = 1.0
+step = 0.01
+
+[node name="Panel" type="Panel" parent="UI/Control/Steering" unique_id=16867179]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.0
+offset_top = -26.0
+offset_right = 4.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/Control" unique_id=412958421]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -545.0
+offset_top = -273.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="BrakeButton" type="TouchScreenButton" parent="UI/Control/HBoxContainer" unique_id=379494095]
+position = Vector2(50, 53)
+scale = Vector2(2.78125, 2.90625)
+texture_normal = SubResource("GradientTexture2D_u41r7")
+
+[node name="GasButton" type="TouchScreenButton" parent="UI/Control/HBoxContainer" unique_id=40596575]
+position = Vector2(295, 37.000004)
+scale = Vector2(3.2343748, 3.1093743)
+texture_normal = SubResource("GradientTexture2D_1sfmx")
+
+[node name="RevDisp" type="HBoxContainer" parent="UI" unique_id=1423989379]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -61.0
+offset_top = 10.0
+offset_right = 61.0
+offset_bottom = 20.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="Low1" type="ColorRect" parent="UI/RevDisp" unique_id=1138533357]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(0, 1, 0, 1)
+
+[node name="Low2" type="ColorRect" parent="UI/RevDisp" unique_id=1968180209]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(0, 1, 0, 1)
+
+[node name="Low3" type="ColorRect" parent="UI/RevDisp" unique_id=1951018038]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(0, 1, 0, 1)
+
+[node name="Med1" type="ColorRect" parent="UI/RevDisp" unique_id=394339906]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(1, 1, 0, 1)
+
+[node name="Med2" type="ColorRect" parent="UI/RevDisp" unique_id=994319509]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(1, 1, 0, 1)
+
+[node name="Med3" type="ColorRect" parent="UI/RevDisp" unique_id=742244726]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(1, 1, 0, 1)
+
+[node name="High1" type="ColorRect" parent="UI/RevDisp" unique_id=1052240017]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(1, 0, 0, 1)
+
+[node name="High2" type="ColorRect" parent="UI/RevDisp" unique_id=643729762]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(1, 0, 0, 1)
+
+[node name="High3" type="ColorRect" parent="UI/RevDisp" unique_id=1133118585]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(1, 0, 0, 1)
+
+[node name="Pause" type="Button" parent="UI" unique_id=34954626]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -26.5
+offset_top = 50.0
+offset_right = 26.5
+offset_bottom = 94.0
+grow_horizontal = 2

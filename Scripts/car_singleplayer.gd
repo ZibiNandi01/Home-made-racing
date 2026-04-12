@@ -68,6 +68,9 @@ var fastest_time = 500000000
 var reset_position = Vector3()
 var reset = false
 
+
+
+
 func air_resistance(spd, dens, form, surf):
 	return (0.5 * dens *spd*spd*form*surf)
 	

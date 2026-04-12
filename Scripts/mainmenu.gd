@@ -10,6 +10,7 @@ extends Control
 @export var settings: TabContainer
 @export var user_manual: VBoxContainer
 @export var main_menu: VBoxContainer
+@onready var play = $Play
 @export var back: Button
 	
 func _ready():
@@ -35,7 +36,9 @@ func _ready():
 
 
 func _button_pressed_play():
-	get_tree().change_scene_to_file("res://Scenes/game.tscn")
+	main_menu.visible = false
+	play.visible = true
+	
 
 func _button_pressed_settings():
 	main_menu.visible = false
@@ -50,6 +53,7 @@ func _button_pressed_user_manual():
 func _button_pressed_back():
 	user_manual.visible = false
 	settings.visible = false
+	play.visible = false
 	main_menu.visible = true
 	back.visible = false
 	
@@ -60,3 +64,18 @@ func _button_pressed_exit():
 
 func _process(delta: float) -> void:
 	pass
+
+
+func _on_test_track_pressed() -> void:
+	Global.track = 0
+	get_tree().change_scene_to_file("res://Scenes/test_track_logik.tscn") # Replace with function body.
+
+
+func _on_server_pressed() -> void:
+	NetworHandler.start_server()
+	get_tree().change_scene_to_file("res://Scenes/test_track_logik.tscn") # Replace with function body.
+
+
+func _on_client_pressed() -> void:
+	NetworHandler.start_client()	
+	get_tree().change_scene_to_file("res://Scenes/test_track_logik.tscn") # Replace with function body.

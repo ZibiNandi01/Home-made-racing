@@ -18,6 +18,7 @@ config/icon="res://Assets/icon.svg"
 [autoload]
 
 Global="*uid://7ue0byy4ss7b"
+NetworHandler="*uid://d118pumvwcth6"
 
 [display]
 
