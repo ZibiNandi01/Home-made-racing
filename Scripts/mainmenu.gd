@@ -7,7 +7,7 @@ extends Control
 @export var label_user_manual: Label
 @export var button_back: Button
 
-@export var settings: TabContainer
+@export var settings: Control
 @export var user_manual: VBoxContainer
 @export var main_menu: VBoxContainer
 @onready var play = $Play

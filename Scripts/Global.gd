@@ -1,7 +1,7 @@
 extends Node
 
-var suspension_stiffnessF = 90
-var suspension_stiffnessR = 90
+var suspension_stiffnessF = 180
+var suspension_stiffnessR = 180
 var steering_type = "Button"
 var gear_box_type = "manual"  # "a" = automatic, "m" = manual
 var track

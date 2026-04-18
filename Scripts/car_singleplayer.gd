@@ -12,7 +12,7 @@ extends VehicleBody3D
 
 @export var MAX_STEER = 0.5
 @export var ENGINE_POWER = 50000
-@export var BRAKE_POWER = 25
+@export var BRAKE_POWER = 100
 
 @export var control: Control
 @export var steering_slider: HSlider
@@ -102,8 +102,17 @@ func rev_disp_set(rpm, rev_disp):
 		elif i < 9:
 			rev_disp.get_child(i).color = Color(1,0,0)
 
+func _enter_tree() -> void:
+	set_multiplayer_authority(name.to_int())
+
+func _ready() -> void:
+	FASTEST_TIME_LABEL.text = str("Fastest lap: ")
+	LAST_LAP.text = str("Last lap: ")
 
 func _physics_process(delta):
+	if Global.is_multiplayer:
+			if !multiplayer.is_server(): return
+
 	var wheel_list = [WheelFL, WheelFR, WheelRL, WheelRR]
 	
 	WheelFL.suspension_stiffness = Global.suspension_stiffnessF
@@ -202,8 +211,8 @@ func _physics_process(delta):
 			dt = 0
 			
 #	print("")
-#	print(str(WheelFL.get_skidinfo()) + "\t" + str(WheelFR.get_skidinfo()))
-#	print(str(WheelRL.get_skidinfo()) + "\t" + str(WheelRR.get_skidinfo()))
+#	print(str(WheelFL.get_skidinfo()) + "\t     " + str(WheelFR.get_skidinfo()))
+#	print(str(WheelRL.get_skidinfo()) + "\t     " + str(WheelRR.get_skidinfo()))
 #	print()
 #	print(str(engine_force)+ "  " + str(brake))
 	
@@ -222,14 +231,28 @@ func _physics_process(delta):
 		if lap_stert_time != 0:
 			current_time_minute = 0
 		#print("finish: ", last_lap)
-			current_time = float(Time.get_ticks_msec() - lap_stert_time) / 1000
+			current_time = float(float(Time.get_ticks_msec() - lap_stert_time) / 1000)
 			while current_time >= 60:
 				current_time_minute += 1
 				current_time -= 60
 			CURRENT_TIME_LABEL.text = str("Current lap: " + str(current_time_minute) + ":" + str(current_time))
 		else:
 			CURRENT_TIME_LABEL.text = str("Current lap: ")
+
+	if reset:
+		self_node.position = reset_position
+		reset = false
+		linear_velocity = Vector3(0,0,0)
+		lap_stert_time = 0
 	
+func _on_finish_line_body_entered(self_node) -> void:
+	if lap_stert_time!=0:
+		last_lap = float(Time.get_ticks_msec() - lap_stert_time)/1000
+		#print(Time.get_ticks_msec())
+		if last_lap < fastest_time:
+			fastest_time = float(last_lap)
+		#print("finish: ", last_lap)
+	lap_stert_time = Time.get_ticks_msec()
 	if LAST_LAP:
 		var last_lap_minute = 0
 		last_lap_print = last_lap
@@ -249,7 +272,7 @@ func _physics_process(delta):
 			fastest_lap_minute = 0
 			fastest_lap_print = fastest_time
 			if fastest_lap_print >= 60:
-				while fastest_time > 60:
+				while fastest_lap_print > 60:
 					fastest_lap_minute += 1
 					fastest_lap_print -= 60
 					if fastest_time < 10:
@@ -261,18 +284,4 @@ func _physics_process(delta):
 		else:
 			FASTEST_TIME_LABEL.text = str("Fastest lap: ")
 
-	if reset:
-		self_node.position = reset_position
-		reset = false
-		linear_velocity = Vector3(0,0,0)
-		lap_stert_time = 0
-	
-func _on_finish_line_body_entered(self_node) -> void:
-	if lap_stert_time!=0:
-		last_lap = float(Time.get_ticks_msec() - lap_stert_time)/1000
-		#print(Time.get_ticks_msec())
-		if last_lap < fastest_time:
-			fastest_time = float(last_lap)
-		#print("finish: ", last_lap)
-	lap_stert_time = Time.get_ticks_msec()
 	 # Replace with function body.

@@ -1,9 +1,10 @@
 extends VBoxContainer
 
-@export var steering_menu: OptionButton
+@onready var steering_menu: OptionButton = $Steering/Steering
 var on_start_steer
 
-@export var gearbox_menu: OptionButton
+@onready var gearbox_container = $GearBox
+@onready var gearbox_menu: OptionButton = $GearBox/GearBox
 var on_start_gear_box
 
 
@@ -32,3 +33,8 @@ func _process(delta: float) -> void:
 	Global.steering_type = steering_menu.get_item_text(steer_id)
 	var gear_box_id = gearbox_menu.get_selected_id()
 	Global.gear_box_type = gearbox_menu.get_item_text(gear_box_id)
+	
+	if Global.steering_type == "Slider":
+		gearbox_container.visible = false
+	else:
+		gearbox_container.visible = true

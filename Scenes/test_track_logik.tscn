@@ -2,8 +2,333 @@
 
 [ext_resource type="Script" uid="uid://upkaj26b7xrb" path="res://Scripts/game.gd" id="1_lu4iv"]
 [ext_resource type="PackedScene" uid="uid://kcbyyiswvcxd" path="res://Scenes/test_track.tscn" id="2_co28u"]
+[ext_resource type="PackedScene" uid="uid://4u8cq5ykk5nl" path="res://Scenes/settings.tscn" id="3_gidut"]
 [ext_resource type="Script" uid="uid://c7deeedu08tyv" path="res://Scripts/multiplayer_spawner.gd" id="3_jdbfo"]
-[ext_resource type="PackedScene" uid="uid://dhpee6wwaxepp" path="res://Scenes/car_multiplayer.tscn" id="4_gidut"]
+[ext_resource type="PackedScene" uid="uid://bwsyvy6gwpfyg" path="res://Assets/auto0.glb" id="5_gidut"]
+
+[sub_resource type="GDScript" id="GDScript_kbc0o"]
+script/source = "extends VehicleBody3D
+
+
+@export var SPEEDOMETER_LABEL: Label
+@export var GearLabel: Label
+
+@onready var WheelFL = $VehicleWheelFL
+@onready var WheelFR = $VehicleWheelFR
+@onready var WheelRL = $VehicleWheelRL
+@onready var WheelRR = $VehicleWheelRR
+
+
+@export var MAX_STEER = 0.5
+@export var ENGINE_POWER = 50000
+@export var BRAKE_POWER = 25
+
+@export var control: Control
+@export var steering_slider: HSlider
+@export var gas_button: TouchScreenButton
+@export var brake_button: TouchScreenButton
+
+@export var self_node: VehicleBody3D
+
+@export var rev_disp: HBoxContainer
+
+var stearing_speed = 1.2
+var returning_speed = 1.5
+
+var direction = 1
+var speed
+
+var brake_balance = 0.8
+
+var air_density = 1.225
+var form_coefficent = .5
+var surface = 2
+var Cl = -1.8
+var down_force
+
+var gear_ratio = [-3, 0, 3.15, 2.29, 1.85, 1.53, 1.27, 1]
+var actual_gear = 1
+var drop_gear = 1.28
+var CWP = 2.88
+var rpm
+var torque
+var gear_up = false
+
+var dt = 0
+
+
+@export var CURRENT_TIME_LABEL: Label
+@export var FASTEST_TIME_LABEL: Label
+@export var LAST_LAP: Label
+
+var lap_stert_time=0
+var last_lap=0
+var last_lap_print
+var current_time
+var current_time_minute
+var fastest_lap_minute
+var fastest_lap_print
+
+var skid_marks = []
+var last_skid_pos = [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
+
+var fastest_time = 500000000
+
+var reset_position = Vector3()
+var reset = false
+
+
+
+
+func air_resistance(spd, dens, form, surf):
+	return (0.5 * dens *spd*spd*form*surf)
+	
+func down_force_calc(spd, dens, form, surf):
+	return (0.5 * dens * spd*spd * surf * form)
+	
+
+func steering_value(input, dead_zone, max_val):
+	if abs(input) < dead_zone:
+		return 0
+	elif input > 0:
+		return (input-dead_zone) * max_val * (1+dead_zone)
+	else:
+		return (input+dead_zone) * max_val * (1+dead_zone) 
+
+
+func torque_calc(x, a, b, c):
+	return a*x*x + b*x + c
+	
+
+func rev_disp_set(rpm, rev_disp):
+	for i in range(len(rev_disp.get_children())):
+		rev_disp.get_child(i).color = Color(0,0,0)
+	for i in range((rpm-6000)/333):
+		if i < 3:
+			rev_disp.get_child(i).color = Color(0,1,0)
+		elif i < 6:
+			rev_disp.get_child(i).color = Color(1,1,0)
+		elif i < 9:
+			rev_disp.get_child(i).color = Color(1,0,0)
+
+
+
+func _enter_tree() -> void:
+	set_multiplayer_authority(name.to_int())
+
+func _physics_process(delta):
+	if !multiplayer.is_server(): return
+	
+	var wheel_list = [WheelFL, WheelFR, WheelRL, WheelRR]
+	
+	WheelFL.suspension_stiffness = Global.suspension_stiffnessF
+	WheelFR.suspension_stiffness = Global.suspension_stiffnessF
+	WheelRL.suspension_stiffness = Global.suspension_stiffnessR
+	WheelRR.suspension_stiffness = Global.suspension_stiffnessR
+	GearLabel.text = str(actual_gear)
+	
+	speed = linear_velocity.length()
+	rpm = abs((speed/(2*3.14*.3))*gear_ratio[actual_gear+1] * drop_gear * CWP * 60)
+	if rpm < 1000:
+		rpm = 1000
+	
+	rev_disp_set(rpm, rev_disp)
+	
+	if Global.steering_type == \"Button\":
+		control.visible = false
+		#Global.gear_box_type = \"m\"
+		if steering>0:
+			if Input.get_axis(\"right\", \"left\") > steering:
+				steering = move_toward(steering, Input.get_axis(\"right\",\"left\") * MAX_STEER, delta *stearing_speed)
+			else:
+				steering = move_toward(steering, Input.get_axis(\"right\",\"left\") * MAX_STEER, delta *returning_speed)
+		elif steering<0:
+			if Input.get_axis(\"right\", \"left\") < steering:
+				steering = move_toward(steering, Input.get_axis(\"right\",\"left\") * MAX_STEER, delta *stearing_speed)
+			else:
+				steering = move_toward(steering, Input.get_axis(\"right\",\"left\") * MAX_STEER, delta *returning_speed)
+		else:
+			steering = move_toward(steering, Input.get_axis(\"right\",\"left\") * MAX_STEER, delta *stearing_speed)
+			
+		if rpm < 9000 and dt > 15:
+			torque = torque_calc(rpm,-1/56250000,115000/56250000, 0.5)
+			engine_force = int(Input.is_action_pressed(\"up\")) * ENGINE_POWER * gear_ratio[actual_gear+1] * drop_gear * CWP  * torque
+		else:
+			engine_force = 0
+			for wheel in wheel_list:
+				if wheel.use_as_traction:
+					WheelRL.brake = BRAKE_POWER
+		WheelFL.brake = int(Input.is_action_pressed(\"down\")) * BRAKE_POWER * brake_balance
+		WheelFR.brake = int(Input.is_action_pressed(\"down\")) * BRAKE_POWER * brake_balance
+		WheelRL.brake = int(Input.is_action_pressed(\"down\")) * BRAKE_POWER * (1-brake_balance)
+		WheelRR.brake = int(Input.is_action_pressed(\"down\")) * BRAKE_POWER * (1-brake_balance)
+			
+
+	if Global.steering_type == \"Slider\":
+		control.visible = true
+		Global.gear_box_type = \"automatic\"
+		steering  = steering_value(steering_slider.value*-1, .1, MAX_STEER)
+		
+		if rpm < 9000 and dt > 15:
+			torque = torque_calc(rpm,-1/56250000,115000/56250000, 0.5)/2
+			engine_force = int(gas_button.is_pressed()) * ENGINE_POWER * gear_ratio[actual_gear+1] * drop_gear * CWP  * torque
+		else:
+			engine_force = 0
+		
+
+				
+		WheelFL.brake = int(brake_button.is_pressed()) * BRAKE_POWER * brake_balance
+		WheelFR.brake = int(brake_button.is_pressed()) * BRAKE_POWER * brake_balance
+		WheelRL.brake = int(brake_button.is_pressed()) * BRAKE_POWER * (1-brake_balance)
+		WheelRR.brake = int(brake_button.is_pressed()) * BRAKE_POWER * (1-brake_balance)
+		
+		
+	for i in range(len(wheel_list)):
+		if wheel_list[i].get_skidinfo() < 0.8 and wheel_list[i].global_position.distance_to(last_skid_pos[i]) > 0:
+			var decal = preload(\"res://Scenes/skid_mark.tscn\").instantiate()
+			decal.position = wheel_list[i].global_position
+			decal.position.y -= .3
+			get_tree().root.add_child(decal)
+			last_skid_pos[i] = wheel_list[i].global_position
+			skid_marks.append(decal)
+			#print(len(skid_marks))
+	
+			
+	if Input.is_action_pressed(\"gear_up\") and dt > 15 and actual_gear < 6 and Global.gear_box_type == \"manual\":
+		actual_gear += 1
+		dt =0
+		
+	if Input.is_action_pressed(\"gear_down\") and dt > 15 and actual_gear>-1 and Global.gear_box_type == \"manual\":
+		actual_gear -= 1
+		dt = 0
+	
+	
+	if rpm > 8800 and actual_gear < 6 and  Global.gear_box_type == \"automatic\" and dt > 15:
+		actual_gear += 1
+		dt = 0
+		gear_up = true
+	elif rpm < 6500 and actual_gear > 1 and  Global.gear_box_type == \"automatic\" and dt > 15:
+		if gear_up and dt > 60:
+			actual_gear -= 1
+			dt = 0
+			gear_up = false
+		elif not gear_up and dt > 15:
+			actual_gear -= 1
+			dt = 0
+			
+#	print(\"\")
+#	print(str(WheelFL.get_skidinfo()) + \"\\t\" + str(WheelFR.get_skidinfo()))
+#	print(str(WheelRL.get_skidinfo()) + \"\\t\" + str(WheelRR.get_skidinfo()))
+#	print()
+#	print(str(engine_force)+ \"  \" + str(brake))
+	
+	var air_res = linear_velocity.normalized()	 * air_resistance(speed, air_density, form_coefficent, surface)
+	down_force = -global_transform.basis.y #Vector3(0,down_force_calc(speed, air_density, Cl, surface), 0)
+	apply_central_force(down_force + air_res)
+	dt += 1
+	
+	
+	
+	if SPEEDOMETER_LABEL:
+		SPEEDOMETER_LABEL.text = str(int(linear_velocity.length()*3.6))
+		
+	
+	if CURRENT_TIME_LABEL:
+		if lap_stert_time != 0:
+			current_time_minute = 0
+		#print(\"finish: \", last_lap)
+			current_time = float(Time.get_ticks_msec() - lap_stert_time) / 1000
+			while current_time >= 60:
+				current_time_minute += 1
+				current_time -= 60
+			CURRENT_TIME_LABEL.text = str(\"Current lap: \" + str(current_time_minute) + \":\" + str(current_time))
+		else:
+			CURRENT_TIME_LABEL.text = str(\"Current lap: \")
+	
+	if LAST_LAP:
+		var last_lap_minute = 0
+		last_lap_print = last_lap
+		if last_lap == 0:
+			LAST_LAP.text = str(\"Last lap: \")
+		elif last_lap >= 60:
+			while last_lap_print >= 60:
+				last_lap_minute += 1
+				last_lap_print -= 60
+				LAST_LAP.text = \"Last lap: \" + str(last_lap_minute) + \":\" + str(last_lap_print)
+		else:
+			LAST_LAP.text = \"Last lap: \" + str(last_lap_minute) + \":\" + str(last_lap_print)
+		
+	
+	if FASTEST_TIME_LABEL:
+		if fastest_time != 500000000:
+			fastest_lap_minute = 0
+			fastest_lap_print = fastest_time
+			if fastest_lap_print >= 60:
+				while fastest_time > 60:
+					fastest_lap_minute += 1
+					fastest_lap_print -= 60
+					if fastest_time < 10:
+						FASTEST_TIME_LABEL.text = \"Fastest lap: \" + str(fastest_lap_minute) + \":0\" + str(fastest_lap_print)
+					else:
+						FASTEST_TIME_LABEL.text = \"Fastest lap: \" + str(fastest_lap_minute) + \":\" + str(fastest_lap_print)
+			else:
+				FASTEST_TIME_LABEL.text = \"Fastest lap: \" + str(fastest_lap_minute) + \":\" + str(fastest_lap_print)
+		else:
+			FASTEST_TIME_LABEL.text = str(\"Fastest lap: \")
+
+	if reset:
+		self_node.position = reset_position
+		reset = false
+		linear_velocity = Vector3(0,0,0)
+		lap_stert_time = 0
+	
+func _on_finish_line_body_entered(self_node) -> void:
+	if lap_stert_time!=0:
+		last_lap = float(Time.get_ticks_msec() - lap_stert_time)/1000
+		#print(Time.get_ticks_msec())
+		if last_lap < fastest_time:
+			fastest_time = float(last_lap)
+		#print(\"finish: \", last_lap)
+	lap_stert_time = Time.get_ticks_msec()
+	 # Replace with function body.
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1sfmx"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_1sfmx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yi23e"]
+resource_name = "wheel"
+albedo_color = Color(0.29586652, 0.2958665, 0.2958665, 1)
+
+[sub_resource type="Gradient" id="Gradient_yi23e"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(1, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_u41r7"]
+gradient = SubResource("Gradient_yi23e")
+
+[sub_resource type="Gradient" id="Gradient_go66d"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0.9490196, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_1sfmx"]
+gradient = SubResource("Gradient_go66d")
+
+[sub_resource type="PackedScene" id="PackedScene_8lhtt"]
+_bundled = {
+"conn_count": 0,
+"conns": PackedInt32Array(),
+"editable_instances": [],
+"id_paths": [PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array()],
+"names": PackedStringArray("Car", "VehicleBody3D", "transform", "mass", "center_of_mass_mode", "center_of_mass", "engine_force", "script", "SPEEDOMETER_LABEL", "GearLabel", "control", "steering_slider", "gas_button", "brake_button", "self_node", "rev_disp", "CURRENT_TIME_LABEL", "FASTEST_TIME_LABEL", "LAST_LAP", "MeshInstance3D", "MeshInstance3D", "transform", "auto0", "SpotLight3D", "SpotLight3D", "transform", "light_energy", "light_indirect_energy", "light_volumetric_fog_energy", "spot_range", "SpotLight3D2", "SpotLight3D", "transform", "light_energy", "light_indirect_energy", "light_volumetric_fog_energy", "spot_range", "CollisionShape3D", "CollisionShape3D", "transform", "shape", "VehicleWheelFL", "VehicleWheel3D", "FrontWheel", "transform", "brake", "use_as_steering", "wheel_radius", "wheel_friction_slip", "suspension_stiffness", "damping_compression", "damping_relaxation", "MeshInstance3D2", "MeshInstance3D", "transform", "mesh", "surface_material_override/0", "VehicleWheelFR", "VehicleWheel3D", "FrontWheel", "transform", "brake", "use_as_steering", "wheel_radius", "wheel_friction_slip", "suspension_stiffness", "damping_compression", "damping_relaxation", "MeshInstance3D", "MeshInstance3D", "transform", "mesh", "surface_material_override/0", "VehicleWheelRL", "VehicleWheel3D", "RearWheel", "transform", "engine_force", "brake", "use_as_traction", "wheel_radius", "wheel_friction_slip", "suspension_stiffness", "damping_compression", "damping_relaxation", "MeshInstance3D", "MeshInstance3D", "transform", "mesh", "surface_material_override/0", "VehicleWheelRR", "VehicleWheel3D", "RearWheel", "transform", "engine_force", "brake", "use_as_traction", "wheel_radius", "wheel_friction_slip", "suspension_stiffness", "damping_compression", "damping_relaxation", "MeshInstance3D", "MeshInstance3D", "transform", "mesh", "surface_material_override/0", "Camera3D", "Camera3D", "transform", "doppler_tracking", "current", "size", "far", "UI", "Control", "layout_mode", "anchors_preset", "anchor_right", "anchor_bottom", "offset_right", "offset_bottom", "grow_horizontal", "grow_vertical", "mouse_filter", "Speedometer", "Label", "layout_mode", "offset_left", "offset_top", "offset_right", "offset_bottom", "Gear", "Label", "layout_mode", "anchors_preset", "anchor_left", "anchor_right", "offset_left", "offset_top", "offset_right", "offset_bottom", "grow_horizontal", "VBoxContainer", "VBoxContainer", "layout_mode", "anchors_preset", "anchor_left", "anchor_right", "offset_left", "offset_top", "offset_right", "offset_bottom", "grow_horizontal", "Current_time", "Label", "layout_mode", "text", "Fastest_time", "Label", "layout_mode", "text", "Last_time", "Label", "layout_mode", "text", "Control", "Control", "layout_mode", "anchors_preset", "anchor_right", "anchor_bottom", "grow_horizontal", "grow_vertical", "Steering", "HSlider", "layout_mode", "anchors_preset", "anchor_right", "anchor_bottom", "offset_left", "offset_top", "offset_right", "offset_bottom", "grow_horizontal", "grow_vertical", "min_value", "max_value", "step", "Panel", "Panel", "show_behind_parent", "layout_mode", "anchors_preset", "anchor_left", "anchor_top", "anchor_right", "anchor_bottom", "offset_left", "offset_top", "offset_right", "offset_bottom", "grow_horizontal", "grow_vertical", "mouse_filter", "HBoxContainer", "HBoxContainer", "layout_mode", "anchors_preset", "anchor_left", "anchor_top", "anchor_right", "anchor_bottom", "offset_left", "offset_top", "grow_horizontal", "grow_vertical", "BrakeButton", "TouchScreenButton", "position", "scale", "texture_normal", "GasButton", "TouchScreenButton", "position", "scale", "texture_normal", "RevDisp", "HBoxContainer", "custom_minimum_size", "layout_mode", "anchors_preset", "anchor_left", "anchor_right", "offset_left", "offset_top", "offset_right", "offset_bottom", "grow_horizontal", "alignment", "Low1", "ColorRect", "custom_minimum_size", "layout_mode", "color", "Low2", "ColorRect", "custom_minimum_size", "layout_mode", "color", "Low3", "ColorRect", "custom_minimum_size", "layout_mode", "color", "Med1", "ColorRect", "custom_minimum_size", "layout_mode", "color", "Med2", "ColorRect", "custom_minimum_size", "layout_mode", "color", "Med3", "ColorRect", "custom_minimum_size", "layout_mode", "color", "High1", "ColorRect", "custom_minimum_size", "layout_mode", "color", "High2", "ColorRect", "custom_minimum_size", "layout_mode", "color", "High3", "ColorRect", "custom_minimum_size", "layout_mode", "color", "Pause", "Button", "layout_mode", "anchors_preset", "anchor_left", "anchor_right", "offset_left", "offset_top", "offset_right", "offset_bottom", "grow_horizontal"),
+"node_count": 39,
+"node_ids": PackedInt32Array(336185123, 403820933, 1325753642, 1699925068, 850514611, 1959653364, 1352343715, 629201625, 1830542043, 2097816326, 1611742216, 1250600026, 62407264, 1336226293, 1449270340, 625398877, 1610748221, 1091066809, 913804164, 1002019586, 931702072, 221848698, 996717018, 2112242560, 16867179, 412958421, 379494095, 40596575, 1423989379, 1138533357, 1968180209, 1951018038, 394339906, 994319509, 742244726, 1052240017, 643729762, 1133118585, 34954626),
+"node_paths": [NodePath("."), NodePath("./MeshInstance3D"), NodePath("./MeshInstance3D"), NodePath("./MeshInstance3D"), NodePath("."), NodePath("."), NodePath("./VehicleWheelFL"), NodePath("."), NodePath("./VehicleWheelFR"), NodePath("."), NodePath("./VehicleWheelRL"), NodePath("."), NodePath("./VehicleWheelRR"), NodePath("."), NodePath("."), NodePath("./UI"), NodePath("./UI"), NodePath("./UI"), NodePath("./UI/VBoxContainer"), NodePath("./UI/VBoxContainer"), NodePath("./UI/VBoxContainer"), NodePath("./UI"), NodePath("./UI/Control"), NodePath("./UI/Control/Steering"), NodePath("./UI/Control"), NodePath("./UI/Control/HBoxContainer"), NodePath("./UI/Control/HBoxContainer"), NodePath("./UI"), NodePath("./UI/RevDisp"), NodePath("./UI/RevDisp"), NodePath("./UI/RevDisp"), NodePath("./UI/RevDisp"), NodePath("./UI/RevDisp"), NodePath("./UI/RevDisp"), NodePath("./UI/RevDisp"), NodePath("./UI/RevDisp"), NodePath("./UI/RevDisp"), NodePath("./UI")],
+"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 17, 2, 0, 3, 1, 4, 2, 5, 3, 6, 4, 7, 5, 1073741832, 6, 1073741833, 7, 1073741834, 8, 1073741835, 9, 1073741836, 10, 1073741837, 11, 1073741838, 12, 1073741839, 13, 1073741840, 14, 1073741841, 15, 1073741842, 16, 0, 1073741824, 0, 20, 19, -1, 1, 21, 17, 0, 1073741825, 0, 2147483647, 22, 18, 0, 0, 1073741826, 0, 24, 23, -1, 5, 25, 19, 26, 20, 27, 21, 28, 22, 29, 23, 0, 1073741827, 0, 31, 30, -1, 5, 32, 24, 33, 25, 34, 26, 35, 27, 36, 28, 0, 1073741828, 0, 38, 37, -1, 2, 39, 29, 40, 30, 0, 1073741829, 0, 42, 41, -1, 8, 44, 31, 45, 32, 46, 33, 47, 34, 48, 35, 49, 36, 50, 37, 51, 38, 1, 43, 1073741830, 0, 53, 52, -1, 3, 54, 39, 55, 40, 56, 41, 0, 1073741831, 0, 58, 57, -1, 8, 60, 42, 61, 43, 62, 44, 63, 45, 64, 46, 65, 47, 66, 48, 67, 49, 1, 59, 1073741832, 0, 69, 68, -1, 3, 70, 50, 71, 51, 72, 52, 0, 1073741833, 0, 74, 73, -1, 9, 76, 53, 77, 54, 78, 55, 79, 56, 80, 57, 81, 58, 82, 59, 83, 60, 84, 61, 1, 75, 1073741834, 0, 86, 85, -1, 3, 87, 62, 88, 63, 89, 64, 0, 1073741835, 0, 91, 90, -1, 9, 93, 65, 94, 66, 95, 67, 96, 68, 97, 69, 98, 70, 99, 71, 100, 72, 101, 73, 1, 92, 1073741836, 0, 103, 102, -1, 3, 104, 74, 105, 75, 106, 76, 0, 1073741837, 0, 108, 107, -1, 5, 109, 77, 110, 78, 111, 79, 112, 80, 113, 81, 0, 1073741838, 0, 115, 114, -1, 9, 116, 82, 117, 83, 118, 84, 119, 85, 120, 86, 121, 87, 122, 88, 123, 89, 124, 90, 0, 1073741839, 0, 126, 125, -1, 5, 127, 91, 128, 92, 129, 93, 130, 94, 131, 95, 0, 1073741840, 0, 133, 132, -1, 9, 134, 96, 135, 97, 136, 98, 137, 99, 138, 100, 139, 101, 140, 102, 141, 103, 142, 104, 0, 1073741841, 0, 144, 143, -1, 9, 145, 105, 146, 106, 147, 107, 148, 108, 149, 109, 150, 110, 151, 111, 152, 112, 153, 113, 0, 1073741842, 0, 155, 154, -1, 2, 156, 114, 157, 115, 0, 1073741843, 0, 159, 158, -1, 2, 160, 116, 161, 117, 0, 1073741844, 0, 163, 162, -1, 2, 164, 118, 165, 119, 0, 1073741845, 0, 167, 166, -1, 6, 168, 120, 169, 121, 170, 122, 171, 123, 172, 124, 173, 125, 0, 1073741846, 0, 175, 174, -1, 13, 176, 126, 177, 127, 178, 128, 179, 129, 180, 130, 181, 131, 182, 132, 183, 133, 184, 134, 185, 135, 186, 136, 187, 137, 188, 138, 0, 1073741847, 0, 190, 189, -1, 14, 191, 139, 192, 140, 193, 141, 194, 142, 195, 143, 196, 144, 197, 145, 198, 146, 199, 147, 200, 148, 201, 149, 202, 150, 203, 151, 204, 152, 0, 1073741848, 0, 206, 205, -1, 10, 207, 153, 208, 154, 209, 155, 210, 156, 211, 157, 212, 158, 213, 159, 214, 160, 215, 161, 216, 162, 0, 1073741849, 0, 218, 217, -1, 3, 219, 163, 220, 164, 221, 165, 0, 1073741850, 0, 223, 222, -1, 3, 224, 166, 225, 167, 226, 168, 0, 1073741851, 0, 228, 227, -1, 11, 229, 169, 230, 170, 231, 171, 232, 172, 233, 173, 234, 174, 235, 175, 236, 176, 237, 177, 238, 178, 239, 179, 0, 1073741852, 0, 241, 240, -1, 3, 242, 180, 243, 181, 244, 182, 0, 1073741853, 0, 246, 245, -1, 3, 247, 183, 248, 184, 249, 185, 0, 1073741854, 0, 251, 250, -1, 3, 252, 186, 253, 187, 254, 188, 0, 1073741855, 0, 256, 255, -1, 3, 257, 189, 258, 190, 259, 191, 0, 1073741856, 0, 261, 260, -1, 3, 262, 192, 263, 193, 264, 194, 0, 1073741857, 0, 266, 265, -1, 3, 267, 195, 268, 196, 269, 197, 0, 1073741858, 0, 271, 270, -1, 3, 272, 198, 273, 199, 274, 200, 0, 1073741859, 0, 276, 275, -1, 3, 277, 201, 278, 202, 279, 203, 0, 1073741860, 0, 281, 280, -1, 3, 282, 204, 283, 205, 284, 206, 0, 1073741861, 0, 286, 285, -1, 9, 287, 207, 288, 208, 289, 209, 290, 210, 291, 211, 292, 212, 293, 213, 294, 214, 295, 215, 0),
+"variants": [Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0), 1300.0, 1, Vector3(0, -0.2, 0), 477.87, SubResource("GDScript_kbc0o"), NodePath("UI/Speedometer"), NodePath("UI/Gear"), NodePath("UI/Control"), NodePath("UI/Control/Steering"), NodePath("UI/Control/HBoxContainer/GasButton"), NodePath("UI/Control/HBoxContainer/BrakeButton"), NodePath("."), NodePath("UI/RevDisp"), NodePath("UI/VBoxContainer/Current_time"), NodePath("UI/VBoxContainer/Fastest_time"), NodePath("UI/VBoxContainer/Last_time"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5786963, 0, 0), ExtResource("5_gidut"), Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3, 0, 0.444), 16.0, 16.0, 16.0, 99.733, Transform3D(-4.3711385e-08, 0, -1, 0, 1, 0, 1, 0, -4.3711385e-08, 3, 0, -0.4441924), 16.0, 16.0, 16.0, 99.733, Transform3D(3.3225663, 0, 0, 0, 1.3735961, 0, 0, 0, 1.4955719, -0.34547856, 0.3078034, 0), SubResource("BoxShape3D_1sfmx"), Transform3D(-3.059797e-08, 0, 0.7, 0, 0.7, 0, -0.7, 0, -3.059797e-08, 0.94910586, -0.235, -0.85499996), 100.0, true, 0.3, 1.0, 90.0, 5.0, 2.0, Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0, 0, 0), SubResource("CylinderMesh_1sfmx"), SubResource("StandardMaterial3D_yi23e"), Transform3D(-3.059797e-08, 0, 0.7, 0, 0.7, 0, -0.7, 0, -3.059797e-08, 0.949, -0.235, 0.855), 100.0, true, 0.3, 1.0, 90.0, 5.0, 2.0, Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0, 0, 0), SubResource("CylinderMesh_1sfmx"), SubResource("StandardMaterial3D_yi23e"), Transform3D(-3.059797e-08, 0, 0.7, 0, 0.7, 0, -0.7, 0, -3.059797e-08, -1.5358391, -0.23464179, -0.8551314), 477.87, 50.0, true, 0.3, 1.1, 80.0, 5.0, 2.0, Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0, 0, 0), SubResource("CylinderMesh_1sfmx"), SubResource("StandardMaterial3D_yi23e"), Transform3D(-3.059797e-08, 0, 0.7, 0, 0.7, 0, -0.7, 0, -3.059797e-08, -1.5358391, -0.23464179, 0.855), 477.87, 50.0, true, 0.3, 1.1, 80.0, 5.0, 2.0, Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0, 0, 0), SubResource("CylinderMesh_1sfmx"), SubResource("StandardMaterial3D_yi23e"), Transform3D(-4.371139e-08, 0.23453137, -0.97210854, 0, 0.97210854, 0.23453137, 1, 1.0251692e-08, -4.2492214e-08, -4.443, 2, 0), 2, true, 4.125, 400.0, 3, 15, 1.0, 1.0, 2.0, 1.0, 2, 2, 2, 0, 28.0, 13.0, 73.0, 41.0, 1, 5, 0.5, 0.5, -0.5, 30.0, 0.5, 53.0, 2, 1, -1, 0.75000006, 1.0, 0.49993896, 29.0, -51.0, 180.0, 0, 2, "123", 2, "345", 2, "234", 1, 15, 1.0, 1.0, 2, 2, 1, -1, 1.0, 1.0, 11.0, 584.0, -710.0, -28.0, 2, 0, -1.0, 1.0, 0.01, true, 1, 8, 0.5, 0.5, 0.5, 0.5, -4.0, -26.0, 4.0, 9.0, 2, 2, 2, 1, -1, 1.0, 1.0, 1.0, 1.0, -545.0, -273.0, 0, 2, Vector2(50, 53), Vector2(2.78125, 2.90625), SubResource("GradientTexture2D_u41r7"), Vector2(295, 37.000004), Vector2(3.2343748, 3.1093743), SubResource("GradientTexture2D_1sfmx"), Vector2(0, 10), 1, 5, 0.5, 0.5, -61.0, 10.0, 61.0, 20.0, 2, 1, Vector2(10, 0), 2, Color(0, 1, 0, 1), Vector2(10, 0), 2, Color(0, 1, 0, 1), Vector2(10, 0), 2, Color(0, 1, 0, 1), Vector2(10, 0), 2, Color(1, 1, 0, 1), Vector2(10, 0), 2, Color(1, 1, 0, 1), Vector2(10, 0), 2, Color(1, 1, 0, 1), Vector2(10, 0), 2, Color(1, 0, 0, 1), Vector2(10, 0), 2, Color(1, 0, 0, 1), Vector2(10, 0), 2, Color(1, 0, 0, 1), 1, 5, 0.5, 0.5, -26.5, 50.0, 26.5, 94.0, 2],
+"version": 3
+}
 
 [node name="TestTrack_logik" type="Node3D" unique_id=2054967099]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
@@ -13,6 +338,7 @@ script = ExtResource("1_lu4iv")
 
 [node name="PauseMenu" type="Control" parent="." unique_id=562240730]
 process_mode = 2
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -57,17 +383,50 @@ text = "Resume"
 layout_mode = 2
 text = "Reset"
 
+[node name="Settings" type="Button" parent="PauseMenu/PanelContainer/MarginContainer/VBoxContainer" unique_id=1579204964]
+layout_mode = 2
+text = "Settings"
+
 [node name="Quit" type="Button" parent="PauseMenu/PanelContainer/MarginContainer/VBoxContainer" unique_id=1488411315]
 layout_mode = 2
 text = "Quit"
 
+[node name="Settings" parent="." unique_id=325903207 instance=ExtResource("3_gidut")]
+process_mode = 3
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -209.5
+offset_top = -160.25
+offset_right = 209.5
+offset_bottom = 160.25
+
+[node name="Back" type="Button" parent="Settings" unique_id=1194620496]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -22.5
+offset_top = -70.5
+offset_right = 22.5
+offset_bottom = -39.5
+grow_horizontal = 2
+grow_vertical = 0
+text = "Back"
+
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1059246332]
-_spawnable_scenes = PackedStringArray("uid://dhpee6wwaxepp")
 spawn_path = NodePath("..")
 script = ExtResource("3_jdbfo")
-network_player = ExtResource("4_gidut")
+network_player = SubResource("PackedScene_8lhtt")
 
 [connection signal="pressed" from="PauseMenu/PanelContainer/MarginContainer/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="PauseMenu/PanelContainer/MarginContainer/VBoxContainer/Resume" to="PauseMenu/PanelContainer/MarginContainer/VBoxContainer/Resume" method="_on_pressed"]
 [connection signal="pressed" from="PauseMenu/PanelContainer/MarginContainer/VBoxContainer/Reset" to="." method="_on_reset_pressed"]
+[connection signal="pressed" from="PauseMenu/PanelContainer/MarginContainer/VBoxContainer/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="PauseMenu/PanelContainer/MarginContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="Settings/Back" to="." method="_on_back_pressed"]

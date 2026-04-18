@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bkx3owecy4x1d"]
 
 [ext_resource type="Script" uid="uid://fiis0p5salxl" path="res://Scripts/mainmenu.gd" id="2_1ehe0"]
-[ext_resource type="Script" uid="uid://nufpj4ocexbe" path="res://Scripts/control.gd" id="3_1ehe0"]
+[ext_resource type="PackedScene" uid="uid://4u8cq5ykk5nl" path="res://Scenes/settings.tscn" id="2_ce3w2"]
 
 [node name="MainMenu" type="Control" unique_id=1434664511 node_paths=PackedStringArray("button_play", "settings_button", "button_user_manual", "button_exit", "label_user_manual", "button_back", "settings", "user_manual", "main_menu", "back")]
 layout_mode = 3
@@ -83,7 +83,7 @@ offset_bottom = -40.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="Settings" type="TabContainer" parent="." unique_id=166101729]
+[node name="Settings" parent="." unique_id=1748789123 instance=ExtResource("2_ce3w2")]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -91,50 +91,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -242.75
-offset_top = -145.0
-offset_right = 242.75
-offset_bottom = 145.0
-grow_horizontal = 2
-grow_vertical = 2
-current_tab = 0
-
-[node name="Control" type="MarginContainer" parent="Settings" unique_id=397031718]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-metadata/_tab_index = 0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Settings/Control" unique_id=614365977 node_paths=PackedStringArray("steering_menu", "gearbox_menu")]
-layout_mode = 2
-theme_override_constants/separation = 16
-script = ExtResource("3_1ehe0")
-steering_menu = NodePath("Steering/Steering")
-gearbox_menu = NodePath("GearBox/GearBox")
-
-[node name="Steering" type="HBoxContainer" parent="Settings/Control/VBoxContainer" unique_id=976937858]
-layout_mode = 2
-
-[node name="SteeringLabel" type="Label" parent="Settings/Control/VBoxContainer/Steering" unique_id=381021693]
-layout_mode = 2
-text = "Steering type:"
-
-[node name="Steering" type="OptionButton" parent="Settings/Control/VBoxContainer/Steering" unique_id=1603188749]
-layout_mode = 2
-
-[node name="GearBox" type="HBoxContainer" parent="Settings/Control/VBoxContainer" unique_id=2057057540]
-layout_mode = 2
-
-[node name="GearBoxLabel" type="Label" parent="Settings/Control/VBoxContainer/GearBox" unique_id=1397757570]
-layout_mode = 2
-text = "Gear box:"
-
-[node name="GearBox" type="OptionButton" parent="Settings/Control/VBoxContainer/GearBox" unique_id=1631900563]
-layout_mode = 2
 
 [node name="Play" type="TabContainer" parent="." unique_id=905517975]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -147,10 +106,9 @@ offset_right = 305.0
 offset_bottom = 232.0
 grow_horizontal = 2
 grow_vertical = 2
-current_tab = 1
+current_tab = 0
 
 [node name="Single player" type="MarginContainer" parent="Play" unique_id=86443669]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
@@ -166,6 +124,7 @@ layout_mode = 2
 text = "Test track"
 
 [node name="Multiplayer" type="MarginContainer" parent="Play" unique_id=542339821]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
